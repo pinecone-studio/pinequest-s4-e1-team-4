@@ -1,9 +1,7 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
-    <div>
-      <div></div>
+    <div className="p-4">
+      <h1>Welcome to CV AI</h1>
     </div>
   );
 }
