@@ -1,9 +1,11 @@
-import Navbar from "@/components/Clerk";
+import { CanvasPanel } from "@/components/canvas-panel";
+import { CommandCenter } from "@/components/Command-center";
 
-export default function Home() {
+export default function Page() {
   return (
-    <main className="min-h-screen bg-[#f9f9ff] text-[#141b2b]">
-      <Navbar />
+    <main className="flex min-h-screen flex-col bg-background lg:h-screen lg:flex-row lg:overflow-hidden">
+      <CommandCenter />
+      <CanvasPanel />
     </main>
   );
 }
