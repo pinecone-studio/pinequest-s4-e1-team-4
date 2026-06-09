@@ -4,7 +4,11 @@ import React, { useState } from "react";
 import { Conversation, Message } from "./Conversation";
 import { CommandInput } from "./Command-input";
 
-export function CommandCenter() {
+interface CommandCenterProps {
+  onExtract?: (data: any) => void;
+}
+
+export function CommandCenter({ onExtract }: CommandCenterProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
@@ -15,7 +19,6 @@ export function CommandCenter() {
   ]);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Хүүхэд компонент (CommandInput)-оос датаг хүлээж авч чатыг шинэчлэх функцүүд
   const addMessage = (message: Message) =>
     setMessages((prev) => [...prev, message]);
 
@@ -36,14 +39,13 @@ export function CommandCenter() {
         </span>
       </header>
 
-      {/* Амьд төлөвүүдийг доош нь дамжуулав */}
       <Conversation messages={messages} isLoading={isLoading} />
 
-      {/* Input-д мессеж нэмэх болон loading өөрчлөх эрхийг өгөв */}
       <CommandInput
         onAddMessage={addMessage}
         setIsQueryLoading={setIsLoading}
         messages={messages}
+        onExtract={onExtract}
       />
     </section>
   );
