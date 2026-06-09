@@ -1,24 +1,27 @@
 "use client";
 
-import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Paperclip, ArrowUp, Loader2 } from "lucide-react";
+import { ArrowUp, Loader2, Paperclip } from "lucide-react";
+import React, { useRef, useState } from "react";
 import { Message } from "./Conversation";
 
 interface CommandInputProps {
   messages: Message[];
   onAddMessage: (msg: Message) => void;
   setIsQueryLoading: (loading: boolean) => void;
-  // 1. ЭНД onExtract-ийг хүлээж авах хаалга нэмлээ
   onExtract?: (data: any) => void;
+  language?: "mn" | "en";
+  resumeData?: any;
 }
 
 export function CommandInput({
   messages,
   onAddMessage,
   setIsQueryLoading,
-  onExtract, // 2. ЭНД задалж авлаа
+  onExtract,
+  language = "mn",
+  resumeData = null,
 }: CommandInputProps) {
   const [input, setInput] = useState("");
   const [localLoading, setLocalLoading] = useState(false);
@@ -48,7 +51,11 @@ export function CommandInput({
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: apiMessages }),
+        body: JSON.stringify({
+          messages: apiMessages,
+          resumeData: resumeData,
+          language: language,
+        }),
       });
 
       if (!res.ok) throw new Error(`Сүлжээний алдаа гарлаа: ${res.status}`);
@@ -107,7 +114,6 @@ export function CommandInput({
           content: `✨ CV-г амжилттай уншлаа! (Бүртгэгдсэн нэр: ${result.data.name || "Тодорхойгүй"}). Одоо энэ CV-г ямар ажилд зориулж сайжруулах вэ?`,
         });
 
-        // 3. 🔥 ХАМГИЙН ГОЛ НЬ: Дата амжилттай ирвэл баруун тал руугаа шиднэ!
         if (onExtract) {
           onExtract(result.data);
         }
