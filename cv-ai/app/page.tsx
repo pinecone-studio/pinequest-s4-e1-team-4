@@ -1,11 +1,17 @@
-import { CanvasPanel } from "@/components/canvas-panel";
-import { CommandCenter } from "@/components/Command-center";
+"use client";
 
-export default function Page() {
+import { CanvasPanel, ResumeData } from "@/components/canvas-panel";
+import { CommandCenter } from "@/components/Command-center";
+import { useState } from "react";
+
+export default function CareerCoachPage() {
+  const [resumeData, setResumeData] = useState<ResumeData | null>(null);
+
   return (
-    <main className="flex min-h-screen flex-col bg-background lg:h-screen lg:flex-row lg:overflow-hidden">
-      <CommandCenter />
-      <CanvasPanel />
-    </main>
+    <div className="flex h-screen w-full">
+      <CommandCenter onExtract={setResumeData} />
+
+      <CanvasPanel resumeData={resumeData} />
+    </div>
   );
 }

@@ -2,9 +2,8 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
-
-// Хуучин pdf-parse-аа хэвээр нь ашиглана
-const pdfParse = require("pdf-parse");
+// @ts-ignore (TypeScript-д зориулсан жижиг хамгаалалт)
+import PDFParser from "pdf2json";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -20,18 +19,10 @@ const SYSTEM_PROMPT = `Чи бол CV засах, мэдээлэл ялгах м
   "phone": "Утасны дугаар",
   "skills": ["Ур чадваруудын жагсаалт"],
   "experience": [
-    {
-      "company": "Компанийн нэр",
-      "role": "Албан тушаал",
-      "duration": "Ажилласан хугацаа"
-    }
+    { "company": "Компанийн нэр", "role": "Албан тушаал", "duration": "Хугацаа" }
   ],
   "education": [
-    {
-      "school": "Сургуулийн нэр",
-      "degree": "Мэргэжил / Зэрэг",
-      "duration": "Суралцсан хугацаа"
-    }
+    { "school": "Сургуулийн нэр", "degree": "Мэргэжил", "duration": "Хугацаа" }
   ]
 }`;
 
@@ -48,7 +39,7 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // ЗУРАГ БОЛОВСРУУЛАХ
+    // 1. ЗУРАГ БОЛОВСРУУЛАХ
     if (file.type.startsWith("image/")) {
       const base64Image = buffer.toString("base64");
       const response = await openai.chat.completions.create({
@@ -72,11 +63,19 @@ export async function POST(req: NextRequest) {
         response_format: { type: "json_object" },
       });
       aiResponse = response.choices[0].message.content || "{}";
-
-      // PDF БОЛОВСРУУЛАХ
     } else if (file.type === "application/pdf") {
-      const pdfData = await pdfParse(buffer);
-      const extractedText = pdfData.text;
+      const extractedText = await new Promise<string>((resolve, reject) => {
+        const pdfParser = new PDFParser(null, true);
+
+        pdfParser.on("pdfParser_dataError", (errData: any) =>
+          reject(errData.parserError),
+        );
+        pdfParser.on("pdfParser_dataReady", () => {
+          resolve(pdfParser.getRawTextContent());
+        });
+
+        pdfParser.parseBuffer(buffer);
+      });
 
       const response = await openai.chat.completions.create({
         model: "gpt-4o-mini",
@@ -92,17 +91,14 @@ export async function POST(req: NextRequest) {
       aiResponse = response.choices[0].message.content || "{}";
     } else {
       return NextResponse.json(
-        {
-          error:
-            "Дэмжигдэхгүй файлын формат. Зөвхөн PDF эсвэл Зураг оруулна уу.",
-        },
+        { error: "Дэмжигдэхгүй файлын формат." },
         { status: 400 },
       );
     }
 
     return NextResponse.json({ data: JSON.parse(aiResponse) });
   } catch (error: any) {
-    console.error("OpenAI Extractor API Error:", error);
+    console.error("API Error:", error);
     return NextResponse.json(
       { error: "Сервер дээр алдаа гарлаа", details: error.message },
       { status: 500 },

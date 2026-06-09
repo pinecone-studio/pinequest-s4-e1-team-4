@@ -43,7 +43,6 @@ export default function CvBuilderPage() {
     },
   });
 
-  // 3. Файл унших үйлдэл
   const onDrop = async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (!file) return;
@@ -64,15 +63,12 @@ export default function CvBuilderPage() {
 
       if (!response.ok) throw new Error(result.error);
 
-      // AI-аас ирсэн дата
       const aiData = result.data;
 
-      // 4. Формыг автоматаар бөглөх (Ид шид энд явагдана)
       form.reset({
         name: aiData.name || "",
         email: aiData.email || "",
         phone: aiData.phone || "",
-        // Ур чадварыг Array байвал таслалаар тусгаарласан String болгох
         skills: Array.isArray(aiData.skills)
           ? aiData.skills.join(", ")
           : aiData.skills || "",
@@ -95,7 +91,6 @@ export default function CvBuilderPage() {
     multiple: false,
   });
 
-  // Хэрэглэгч формыг хадгалах үед ажиллах функц
   const onSubmit = (data: FormValues) => {
     toast.success("CV-ний мэдээлэл хадгалагдлаа!");
     console.log("Бэлэн болсон дата:", data);
@@ -106,9 +101,7 @@ export default function CvBuilderPage() {
       <h1 className="text-3xl font-bold mb-8 text-center">AI CV Үүсгэгч</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* ЗҮҮН ТАЛ: ФОРМ БОЛОН UPLOAD */}
         <div className="space-y-6">
-          {/* Drag & Drop Хэсэг */}
           <div
             {...getRootProps()}
             className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors ${
@@ -134,7 +127,6 @@ export default function CvBuilderPage() {
             )}
           </div>
 
-          {/* Мэдээлэл оруулах Форм */}
           <Card className="p-6">
             <Form {...form}>
               <form
@@ -209,11 +201,9 @@ export default function CvBuilderPage() {
           </Card>
         </div>
 
-        {/* БАРУУН ТАЛ: АМЬД ХАРАГДАЦ (LIVE PREVIEW) */}
-        <div className="bg-muted/30 rounded-xl border p-8 flex flex-col h-full min-h-[500px]">
+        <div className="bg-muted/30 rounded-xl border p-8 flex flex-col h-full min-h-125">
           <h2 className="text-xl font-bold border-b pb-2 mb-4">CV Загвар</h2>
           <div className="flex-1 bg-white border rounded shadow-sm p-8">
-            {/* Форм дээр бичсэн зүйлс энд шууд харагдана */}
             <h1 className="text-2xl font-bold uppercase tracking-wider">
               {form.watch("name") || "ТАНЫ НЭР"}
             </h1>
