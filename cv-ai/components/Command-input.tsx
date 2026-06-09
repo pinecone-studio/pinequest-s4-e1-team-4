@@ -181,14 +181,15 @@ interface CommandInputProps {
   messages: Message[];
   onAddMessage: (msg: Message) => void;
   setIsQueryLoading: (loading: boolean) => void;
-  onExtract: Dispatch<SetStateAction<ResumeData | null>>;
+  // 1. ЭНД onExtract-ийг хүлээж авах хаалга нэмлээ
+  onExtract?: (data: any) => void;
 }
 
 export function CommandInput({
   messages,
   onAddMessage,
   setIsQueryLoading,
-  onExtract,
+  onExtract, // 2. ЭНД задалж авлаа
 }: CommandInputProps) {
   const [input, setInput] = useState("");
   const [localLoading, setLocalLoading] = useState(false);
@@ -277,6 +278,11 @@ export function CommandInput({
           role: "ai",
           content: `✨ CV-г амжилттай уншлаа! (Бүртгэгдсэн нэр: ${result.data.name || "Тодорхойгүй"}). Одоо энэ CV-г ямар ажилд зориулж сайжруулах вэ?`,
         });
+
+        // 3. 🔥 ХАМГИЙН ГОЛ НЬ: Дата амжилттай ирвэл баруун тал руугаа шиднэ!
+        if (onExtract) {
+          onExtract(result.data);
+        }
       }
     } catch (err) {
       console.error(err);

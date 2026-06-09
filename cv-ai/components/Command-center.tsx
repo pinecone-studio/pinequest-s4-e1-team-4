@@ -60,7 +60,11 @@ type Props = {
   onExtract: Dispatch<SetStateAction<ResumeData | null>>;
 };
 
-export function CommandCenter({ onExtract }: Props) {
+interface CommandCenterProps {
+  onExtract?: (data: any) => void;
+}
+
+export function CommandCenter({ onExtract }: CommandCenterProps) {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",

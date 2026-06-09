@@ -1,6 +1,6 @@
 "use client";
 
-import { CanvasPanel, ResumeData } from "@/components/canvas-panel";
+import { CanvasPanel, ResumeData } from "@/components/Canvas-panel";
 import { CommandCenter } from "@/components/Command-center";
 import { useState } from "react";
 
@@ -10,7 +10,6 @@ export default function CareerCoachPage() {
   return (
     <div className="flex h-screen w-full">
       <CommandCenter onExtract={setResumeData} />
-
       <CanvasPanel resumeData={resumeData} />
     </div>
   );
