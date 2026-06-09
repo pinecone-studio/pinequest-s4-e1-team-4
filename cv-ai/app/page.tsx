@@ -1,6 +1,6 @@
 "use client";
 
-import { CanvasPanel, ResumeData } from "@/components/Canvas-panel";
+import { CanvasPanel, ResumeData } from "@/components/canvas-panel";
 import { CommandCenter } from "@/components/Command-center";
 import { useState } from "react";
 
