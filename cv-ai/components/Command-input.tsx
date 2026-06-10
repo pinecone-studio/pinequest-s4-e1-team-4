@@ -272,7 +272,7 @@ export function CommandInput({
       const result = await res.json();
 
       if (result.data) {
-        onExtract(result.data);
+        // onExtract(result.data);
         onAddMessage({
           id: (Date.now() + 1).toString(),
           role: "ai",
