@@ -9,7 +9,7 @@ const openai = new OpenAI({
 
 export async function POST(req: NextRequest) {
   try {
-    const { messages, resumeData } = await req.json();
+    const { messages, resumeData, language } = await req.json();
 
     if (!messages || !Array.isArray(messages)) {
       return NextResponse.json(
@@ -18,7 +18,11 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const systemPrompt = `Чи бол CV засах, Cover Letter үүсгэх мэргэжлийн AI Карьерын Төлөөлөгч юм. 
+    const currentLang = language || "mn";
+
+    const systemPrompt =
+      currentLang === "mn"
+        ? `Чи бол CV засах, Cover Letter үүсгэх мэргэжлийн AI Карьерын Төлөөлөгч юм. 
 
          ХЭРЭГЛЭГЧИЙН ОДООГИЙН CV МЭДЭЭЛЭЛ:
          ${resumeData ? JSON.stringify(resumeData) : "Одоогоор CV оруулаагүй байна."}
@@ -27,11 +31,25 @@ export async function POST(req: NextRequest) {
          
          ЧУХАЛ ДҮРЭМ: Чиний хариулт ЗААВАЛ дараах бүтэцтэй цэвэр JSON байх ёстой:
          {
-           "message": "Хэрэглэгчид харуулах чиний хариулт (Жишээ нь: 'Би таны ур чадвар руу React болон Node.js-ийг нэмчихлээ')",
-           "updatedData": {
-             // Энд шинэчлэгдсэн CV-г бүхлээр нь буцаах (name, email, skills, experience, education). Хэрэв CV-г өөрчлөх шаардлагагүй бол null буцаах.
-           }
-         }`;
+           "message": "Хэрэглэгчид харуулах чиний хариулт",
+           "updatedData": {}
+         }
+         
+         МАС МҮЧАЛ: Хариултын 'message' хэсэг заавал 1-2 өгүүлбэрт багтах, маш товч байх ёстой. Урт текст дуут системээр уншихад сонин сонсогддог тул маш товч хариул.`
+        : `You are a professional AI Career Agent specialized in resume editing, cover letter generation, and mock interviews. 
+
+         CURRENT RESUME DATA:
+         ${resumeData ? JSON.stringify(resumeData) : "No resume provided yet."}
+         
+         If the user requests any changes to their resume or profile, update the information accordingly.
+         
+         CRITICAL RULE: Your response MUST be a clean JSON with the following structure:
+         {
+           "message": "Your response to the user",
+           "updatedData": {}
+         }
+         
+         CRITICAL INSTRUCTION: The 'message' field must be extremely concise (1-2 sentences max) as it will be read aloud by a text-to-speech engine.`;
 
     const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
