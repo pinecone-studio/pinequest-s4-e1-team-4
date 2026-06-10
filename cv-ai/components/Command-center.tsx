@@ -52,9 +52,8 @@
 "use client";
 
 import { Globe } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { CommandInput } from "./Command-input";
-import { Conversation, Message } from "./Conversation";
+import { useEffect, useRef } from "react";
+
 import React, { useState, Dispatch, SetStateAction } from "react";
 import { Conversation, Message } from "./Conversation";
 import { CommandInput } from "./Command-input";
