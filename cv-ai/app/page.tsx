@@ -10,7 +10,7 @@ export default function CareerCoachPage() {
   const [resumeData, setResumeData] = useState<ResumeData | null>(null);
 
   return (
-    <div className="flex h-screen w-full">
+    <div className="">
       {/* <CommandCenter onExtract={setResumeData} />
       <CanvasPanel resumeData={resumeData} /> */}
       <Design/>
