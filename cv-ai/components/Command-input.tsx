@@ -260,7 +260,7 @@ export function CommandInput({
     onAddMessage({
       id: Date.now().toString(),
       role: "user",
-      content: `📁 Файл хууллаа: ${file.name}`,
+      content: ` Файл хууллаа: ${file.name}`,
     });
     setIsQueryLoading(true);
     setLocalLoading(true);
@@ -283,7 +283,7 @@ export function CommandInput({
         onAddMessage({
           id: (Date.now() + 1).toString(),
           role: "ai",
-          content: `✨ CV-г амжилттай уншлаа! (Бүртгэгдсэн нэр: ${result.data.name || "Тодорхойгүй"}). Одоо энэ CV-г ямар ажилд зориулж сайжруулах вэ?`,
+          content: ` CV-г амжилттай уншлаа! (Бүртгэгдсэн нэр: ${result.data.name || "Тодорхойгүй"}). Одоо энэ CV-г ямар ажилд зориулж сайжруулах вэ?`,
         });
 
         if (onExtract) {
