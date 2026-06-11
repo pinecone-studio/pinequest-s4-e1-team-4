@@ -1,4 +1,5 @@
 import type { AiResult, CvData } from "./types";
+import { TOP_COMPANIES, analyzeCompanyFit } from "./companies";
 
 const KNOWN_SKILLS = [
   "React",
@@ -97,6 +98,7 @@ export function buildAiResult(cv: CvData, cvText = ""): AiResult {
   const skills = splitItems(cv.skills);
   const text = `${cv.summary} ${cv.experience} ${cv.projects} ${cvText}`;
   const hasMetric = /\b\d+%|\b\d+x|\b\d+\+|\b\d{2,}\b/.test(text);
+  
   const advice = [
     !cv.summary && "Summary хэсэгт 2-3 өгүүлбэрээр гол үнэ цэнээ бич.",
     !hasMetric && "Ажлын үр дүнгээ тоо, хувь, хугацаа эсвэл хэмжүүртэй болго.",
@@ -106,9 +108,11 @@ export function buildAiResult(cv: CvData, cvText = ""): AiResult {
       "Сүүлийн ажлын туршлагаа role, company, impact хэлбэрээр оруул.",
     !cv.email && "Recruiter шууд холбогдох имэйл заавал харагдах ёстой.",
   ].filter(Boolean) as string[];
+
   const keywords = [
     ...new Set([...roleKeywords(cv.targetRole), ...skills]),
   ].slice(0, 8);
+
   const score = Math.min(
     98,
     38 +
@@ -119,10 +123,25 @@ export function buildAiResult(cv: CvData, cvText = ""): AiResult {
       Math.min(skills.length * 3, 15) +
       Number(hasMetric) * 10,
   );
+
   const role = cv.targetRole || cv.title || "сонгосон ажлын байр";
   const improvedSummary =
     cv.summary ||
-    `${role}-д чиглэсэн, хэрэглэгчийн асуудлыг ойлгож шийдэл гаргах чадвартай мэргэжилтэн. Багтай хамтран чанартай бүтээгдэхүүн хүргэх, суралцах хурд болон хариуцлагатай гүйцэтгэлээр үнэ цэн бүтээнэ.`;
+    `${role}-д чиглэсэн, хэрэглэгчийн асуудлыг ойлгож шийдэл гаргах чадвартай мэргэжилтэн.`;
+
+  const companyFits = analyzeCompanyFit(cv.skills, cv.targetRole);
+  const topCompanies = companyFits
+    .filter((fit) => fit.score >= 30)
+    .slice(0, 5)
+    .map((fit) => ({
+      id: fit.company.id,
+      name: fit.company.name,
+      score: fit.score,
+      matchedSkills: fit.company.skills.filter((skill) =>
+        cv.skills.toLowerCase().includes(skill.toLowerCase()),
+      ),
+    }));
+
   return {
     score,
     improvedSummary,
@@ -139,5 +158,6 @@ export function buildAiResult(cv: CvData, cvText = ""): AiResult {
     ],
     notes:
       "Local AI fallback ашигласан. OPENAI_API_KEY нэмбэл илүү нарийвчилсан дүн шинжилгээ авна.",
+    topCompanies,
   };
 }

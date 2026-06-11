@@ -28,11 +28,11 @@ export function CvStudio() {
 
   function extractFromText() {
     if (!cv.cvText.trim()) {
-      toast.error("CV текст эсвэл raw note оруулна уу.");
+      toast.error("Please enter CV text or notes");
       return;
     }
     mergeCv(extractCvFromText(cv.cvText));
-    toast.success("Мэдээллийг ялгаж форм руу орууллаа.");
+    toast.success("Extracted information to form");
   }
 
   async function analyze() {
@@ -44,11 +44,11 @@ export function CvStudio() {
         body: JSON.stringify({ cv, cvText: cv.cvText }),
       });
       const body = await response.json();
-      if (!response.ok) throw new Error(body.error ?? "AI алдаа гарлаа");
+      if (!response.ok) throw new Error(body.error ?? "AI analysis failed");
       setResult(body.data);
-      toast.success("AI зөвлөмж шинэчлэгдлээ.");
+      toast.success("AI insights updated");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "AI алдаа гарлаа");
+      toast.error(error instanceof Error ? error.message : "AI analysis failed");
     } finally {
       setBusy(false);
     }
@@ -61,12 +61,12 @@ export function CvStudio() {
     try {
       const response = await fetch("/api/cv-extract", { method: "POST", body: data });
       const body = await response.json();
-      if (!response.ok) throw new Error(body.error ?? "Файл уншихад алдаа гарлаа");
+      if (!response.ok) throw new Error(body.error ?? "File read failed");
       mergeCv(body.data);
       if (body.analysis) setResult(body.analysis);
-      toast.success("Файлаас мэдээлэл татлаа.");
+      toast.success("Extracted from file");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Файл уншихад алдаа гарлаа");
+      toast.error(error instanceof Error ? error.message : "File read failed");
     } finally {
       setUploading(false);
     }
@@ -74,7 +74,7 @@ export function CvStudio() {
 
   return (
     <main className="min-h-screen bg-[#f7f7f4] text-zinc-950">
-      <div className="grid min-h-screen lg:grid-cols-[460px_1fr]">
+      <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[460px_1fr]">
         <EditorPanel
           busy={busy}
           cv={cv}

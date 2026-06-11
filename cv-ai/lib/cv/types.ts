@@ -17,6 +17,13 @@ export type CvData = {
   template: TemplateId;
 };
 
+export type CompanyFit = {
+  id: string;
+  name: string;
+  score: number;
+  matchedSkills: string[];
+};
+
 export type AiResult = {
   score: number;
   improvedSummary: string;
@@ -24,6 +31,7 @@ export type AiResult = {
   keywords: string[];
   interview: string[];
   notes: string;
+  topCompanies?: CompanyFit[];
 };
 
 export const blankCv: CvData = {

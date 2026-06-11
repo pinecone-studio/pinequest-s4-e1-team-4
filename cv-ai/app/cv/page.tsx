@@ -1,5 +1,5 @@
 import React from "react";
-import { CvStudio } from "./cv/CvStudio";
+import { CvStudio } from "./components/CvStudio";
 
 const page = () => {
   return <CvStudio />;
