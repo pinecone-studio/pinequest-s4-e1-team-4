@@ -2,13 +2,17 @@
 
 import type { CvData } from "@/lib/cv/types";
 
+type StringCvField = {
+  [K in keyof CvData]: CvData[K] extends string ? K : never;
+}[keyof CvData];
+
 export const inputClass =
   "h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm outline-none transition focus:border-emerald-600";
 
 export const textClass =
   "min-h-24 w-full resize-none rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-emerald-600";
 
-export const inputs: { key: keyof CvData; label: string; placeholder: string }[] = [
+export const inputs: { key: StringCvField; label: string; placeholder: string }[] = [
   { key: "name", label: "Нэр", placeholder: "Бат-Эрдэнэ" },
   { key: "title", label: "Одоогийн role", placeholder: "Frontend Developer" },
   { key: "email", label: "Имэйл", placeholder: "name@mail.com" },
@@ -23,7 +27,7 @@ export function TextArea({
   onField,
   value,
 }: {
-  field: keyof CvData;
+  field: StringCvField;
   label: string;
   onField: <K extends keyof CvData>(field: K, value: CvData[K]) => void;
   value: string;

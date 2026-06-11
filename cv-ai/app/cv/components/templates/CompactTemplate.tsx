@@ -1,5 +1,7 @@
 import type { CvData } from "@/lib/cv/types";
 import { splitItems } from "@/lib/cv/local-ai";
+import { EducationTimeline } from "./EducationTimeline";
+import { ExperienceTimeline } from "./ExperienceTimeline";
 
 function lines(value: string) {
   return value
@@ -44,20 +46,7 @@ export function CompactTemplate({ cv }: { cv: CvData }) {
         </section>
       )}
 
-      {cv.experience && lines(cv.experience).length > 0 && (
-        <section className="mb-3">
-          <h3 className="text-[10px] font-bold uppercase tracking-widest text-zinc-800 border-b border-zinc-300 pb-1">
-            Experience
-          </h3>
-          <ul className="space-y-1 mt-1">
-            {lines(cv.experience).map((item, i) => (
-              <li key={i} className="text-zinc-700 text-[10px]">
-                • {item}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <ExperienceTimeline cv={cv} variant="compact" />
 
       <section className="mb-3">
         <h3 className="text-[10px] font-bold uppercase tracking-widest text-zinc-800 border-b border-zinc-300 pb-1">
@@ -75,20 +64,7 @@ export function CompactTemplate({ cv }: { cv: CvData }) {
         </div>
       </section>
 
-      {cv.education && lines(cv.education).length > 0 && (
-        <section className="mb-3">
-          <h3 className="text-[10px] font-bold uppercase tracking-widest text-zinc-800 border-b border-zinc-300 pb-1">
-            Education
-          </h3>
-          <ul className="space-y-0.5 mt-1">
-            {lines(cv.education).map((item, i) => (
-              <li key={i} className="text-zinc-700 text-[10px]">
-                • {item}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <EducationTimeline cv={cv} variant="compact" />
 
       {cv.projects && lines(cv.projects).length > 0 && (
         <section>

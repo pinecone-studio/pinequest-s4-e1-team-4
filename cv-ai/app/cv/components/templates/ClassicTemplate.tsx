@@ -1,5 +1,7 @@
 import type { CvData } from "@/lib/cv/types";
 import { splitItems } from "@/lib/cv/local-ai";
+import { EducationTimeline } from "./EducationTimeline";
+import { ExperienceTimeline } from "./ExperienceTimeline";
 
 function lines(value: string) {
   return value
@@ -12,10 +14,7 @@ export function ClassicTemplate({ cv }: { cv: CvData }) {
   const skills = splitItems(cv.skills).length
     ? splitItems(cv.skills)
     : ["React", "TypeScript", "Teamwork"];
-  const expLines = lines(cv.experience);
-  const eduLines = lines(cv.education);
   const projLines = cv.projects ? lines(cv.projects) : [];
-  const eduProjLines = [...eduLines, ...projLines];
 
   return (
     <article className="print-area mx-auto flex min-h-[920px] w-full max-w-[760px] overflow-hidden bg-[#f0f0f0] shadow-sm ring-1 ring-zinc-300 text-sm">
@@ -86,15 +85,15 @@ export function ClassicTemplate({ cv }: { cv: CvData }) {
           </ul>
         </div>
 
-        {eduProjLines.length > 0 && (
+        {projLines.length > 0 && (
           <>
             <div className="w-full h-px bg-zinc-600 my-5" />
             <div className="w-full">
               <p className="text-[9px] uppercase tracking-[0.2em] text-zinc-400 font-bold mb-3 text-center">
-                Education
+                Projects
               </p>
               <ul className="w-full space-y-1">
-                {eduProjLines.map((e, i) => (
+                {projLines.map((e, i) => (
                   <li
                     key={i}
                     className="list-disc list-inside text-[12px] text-zinc-300 leading-6"
@@ -120,33 +119,8 @@ export function ClassicTemplate({ cv }: { cv: CvData }) {
           </section>
         )}
 
-        {expLines.length > 0 && (
-          <section>
-            <h3 className="text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-800 border-b border-zinc-300 pb-1 mb-3">
-              Work Experience
-            </h3>
-            <div className="space-y-4">
-              {expLines.map((item, i) => {
-                const parts = item.split(/[·\/\|]/).map((p) => p.trim());
-                return (
-                  <div key={i} className="flex gap-3">
-                    <div className="mt-1 w-2.5 h-2.5 flex-shrink-0 bg-zinc-900 rounded-sm" />
-                    <div>
-                      <p className="font-bold text-[12px] uppercase tracking-wide text-zinc-900">
-                        {parts[0]}
-                      </p>
-                      {parts.slice(1).join(" · ") && (
-                        <p className="text-[11px] text-zinc-500 uppercase tracking-wide mt-0.5">
-                          {parts.slice(1).join(" · ")}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-        )}
+        <ExperienceTimeline cv={cv} variant="classic" />
+        <EducationTimeline cv={cv} variant="classic" />
       </main>
     </article>
   );

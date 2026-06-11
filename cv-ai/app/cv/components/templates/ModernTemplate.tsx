@@ -1,5 +1,7 @@
 import type { CvData } from "@/lib/cv/types";
 import { splitItems } from "@/lib/cv/local-ai";
+import { EducationTimeline } from "./EducationTimeline";
+import { ExperienceTimeline } from "./ExperienceTimeline";
 
 const sectionTitle = "text-[11px] font-bold uppercase tracking-[0.16em]";
 
@@ -56,32 +58,9 @@ export function ModernTemplate({ cv }: { cv: CvData }) {
         </div>
       </section>
 
-      {cv.experience && (
-        <section className="mb-8">
-          <h3 className={`${sectionTitle} text-blue-700 mb-3`}>Experience</h3>
-          <ul className="space-y-3">
-            {lines(cv.experience).map((item, i) => (
-              <li key={i} className="flex gap-3">
-                <span className="text-blue-500 font-bold mt-0.5">▸</span>
-                <span className="text-slate-700 text-sm">{item}</span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <ExperienceTimeline cv={cv} variant="modern" />
 
-      {cv.education && (
-        <section className="mb-8">
-          <h3 className={`${sectionTitle} text-blue-700 mb-3`}>Education</h3>
-          <ul className="space-y-2">
-            {lines(cv.education).map((item, i) => (
-              <li key={i} className="text-slate-700 text-sm">
-                • {item}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <EducationTimeline cv={cv} variant="modern" />
 
       {cv.projects && (
         <section>

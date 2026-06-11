@@ -3,10 +3,138 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
-import { blankCv, type AiResult, type CvData } from "@/lib/cv/types";
+import {
+  blankCv,
+  createEducation,
+  createExperience,
+  serializeEducations,
+  serializeExperiences,
+  type AiResult,
+  type CvData,
+  type EducationItem,
+  type ExperienceItem,
+} from "@/lib/cv/types";
 import { buildAiResult, extractCvFromText } from "@/lib/cv/local-ai";
 import { EditorPanel } from "./EditorPanel";
 import { PreviewPanel } from "./PreviewPanel";
+
+type LoosePatch = Partial<CvData> & {
+  experience?: unknown;
+  skills?: unknown;
+  education?: unknown;
+};
+
+function joinLooseList(value: unknown) {
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => {
+        if (typeof item === "string") return item;
+        if (item && typeof item === "object") return Object.values(item).join(" - ");
+        return "";
+      })
+      .filter(Boolean)
+      .join("\n");
+  }
+
+  return typeof value === "string" ? value : "";
+}
+
+function normalizeExperienceItems(value: unknown): ExperienceItem[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.map((item) => {
+    const next = createExperience();
+    if (typeof item === "string") {
+      next.functionsAchievements = item;
+      return next;
+    }
+
+    if (!item || typeof item !== "object") return next;
+
+    const record = item as Record<string, unknown>;
+    next.companyName = String(record.companyName ?? record.company ?? "");
+    next.jobTitle = String(record.jobTitle ?? record.role ?? record.title ?? "");
+    next.address = String(record.address ?? record.location ?? "");
+    next.functionsAchievements = String(
+      record.functionsAchievements ??
+        record.achievements ??
+        record.description ??
+        record.details ??
+        "",
+    );
+    next.startDate = String(record.startDate ?? "");
+    next.endDate = String(record.endDate ?? "");
+
+    const duration = String(record.duration ?? "");
+    if (duration && !next.startDate && !next.endDate) {
+      next.functionsAchievements = [next.functionsAchievements, duration]
+        .filter(Boolean)
+        .join("\n");
+    }
+
+    return next;
+  });
+}
+
+function normalizeEducationItems(value: unknown): EducationItem[] {
+  if (!Array.isArray(value)) return [];
+
+  return value.map((item) => {
+    const next = createEducation();
+    if (typeof item === "string") {
+      next.schoolName = item;
+      return next;
+    }
+
+    if (!item || typeof item !== "object") return next;
+
+    const record = item as Record<string, unknown>;
+    next.level = String(record.level ?? record.degree ?? record.educationLevel ?? "");
+    next.schoolName = String(record.schoolName ?? record.school ?? record.name ?? "");
+    next.address = String(record.address ?? record.location ?? "");
+    next.startDate = String(record.startDate ?? "");
+    next.endDate = String(record.endDate ?? "");
+
+    const duration = String(record.duration ?? "");
+    if (duration && !next.startDate && !next.endDate) {
+      next.address = [next.address, duration].filter(Boolean).join(" | ");
+    }
+
+    return next;
+  });
+}
+
+function normalizeCvPatch(patch: LoosePatch): Partial<CvData> {
+  const next: Partial<CvData> = { ...patch };
+
+  if (patch.skills !== undefined) {
+    next.skills = Array.isArray(patch.skills)
+      ? patch.skills.filter(Boolean).join(", ")
+      : String(patch.skills ?? "");
+  }
+
+  if (patch.education !== undefined) {
+    const structured = normalizeEducationItems(patch.education);
+    if (structured.length > 0) {
+      next.educations = structured;
+      next.education = serializeEducations(structured);
+    } else {
+      next.education = joinLooseList(patch.education);
+    }
+  }
+
+  if (patch.experience !== undefined) {
+    const structured = normalizeExperienceItems(patch.experience);
+    if (structured.length > 0) {
+      next.experiences = structured;
+      next.experience = serializeExperiences(structured);
+    } else {
+      next.experience = joinLooseList(patch.experience);
+    }
+  }
+
+  return next;
+}
 
 export function CvStudio() {
   const [cv, setCv] = useState<CvData>(blankCv);
@@ -16,12 +144,19 @@ export function CvStudio() {
 
   function update<K extends keyof CvData>(field: K, value: CvData[K]) {
     const next = { ...cv, [field]: value };
+    if (field === "experiences") {
+      next.experience = serializeExperiences(value as CvData["experiences"]);
+    }
+    if (field === "educations") {
+      next.education = serializeEducations(value as CvData["educations"]);
+    }
     setCv(next);
     setResult(buildAiResult(next, next.cvText));
   }
 
-  function mergeCv(patch: Partial<CvData>) {
-    const next = { ...cv, ...patch };
+  function mergeCv(patch: LoosePatch) {
+    const normalized = normalizeCvPatch(patch);
+    const next = { ...cv, ...normalized };
     setCv(next);
     setResult(buildAiResult(next, next.cvText));
   }
