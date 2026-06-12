@@ -1,11 +1,11 @@
 "use client";
-
+ 
 import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Paperclip, ArrowUp, Loader2, Mic } from "lucide-react";
 import { Message } from "./Conversation";
-
+ 
 interface CommandInputProps {
   messages: Message[];
   onAddMessage: (msg: Message) => void;
@@ -13,7 +13,7 @@ interface CommandInputProps {
   onExtract?: (data: any) => void;
   language?: "mn" | "en";
 }
-
+ 
 export function CommandInput({
   messages,
   onAddMessage,
@@ -27,11 +27,11 @@ export function CommandInput({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
-
+ 
   const handleSendText = async (overrideText?: string) => {
     const textToSend = overrideText || input;
     if (!textToSend.trim() || localLoading) return;
-
+ 
     const userMsg: Message = {
       id: Date.now().toString(),
       role: "user",
@@ -39,27 +39,27 @@ export function CommandInput({
     };
     onAddMessage(userMsg);
     if (!overrideText) setInput("");
-
+ 
     setIsQueryLoading(true);
     setLocalLoading(true);
-
+ 
     try {
       const apiMessages = messages.map((m) => ({
         role: m.role === "ai" ? "assistant" : "user",
         content: m.content,
       }));
       apiMessages.push({ role: "user", content: textToSend });
-
+ 
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: apiMessages, language }),
       });
-
+ 
       if (!res.ok) throw new Error(`Сүлжээний алдаа гарлаа: ${res.status}`);
-
+ 
       const data = await res.json();
-
+ 
       if (data.message) {
         onAddMessage({
           id: (Date.now() + 1).toString(),
@@ -79,18 +79,18 @@ export function CommandInput({
       setLocalLoading(false);
     }
   };
-
+ 
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
-
+ 
       mediaRecorder.ondataavailable = (e) => {
         if (e.data.size > 0) chunksRef.current.push(e.data);
       };
-
+ 
       mediaRecorder.onstop = async () => {
         const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
         // 🔥 Хамгийн гол зассан хэсэг: 2.5KB-аас дээш үед л илгээнэ.
@@ -103,33 +103,33 @@ export function CommandInput({
         }
         stream.getTracks().forEach((track) => track.stop());
       };
-
+ 
       mediaRecorder.start();
       setIsRecording(true);
     } catch (err) {
       console.error(err);
     }
   };
-
+ 
   const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
     }
   };
-
+ 
   const sendToStt = async (audioBlob: Blob) => {
     setIsQueryLoading(true);
     setLocalLoading(true);
     const formData = new FormData();
     formData.append("audio", audioBlob);
-
+ 
     try {
       const res = await fetch("/api/chimege-stt", {
         method: "POST",
         body: formData,
       });
-
+ 
       if (res.ok) {
         const data = await res.json();
         if (data.text) {
@@ -145,11 +145,11 @@ export function CommandInput({
       setLocalLoading(false);
     }
   };
-
+ 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || localLoading) return;
-
+ 
     onAddMessage({
       id: Date.now().toString(),
       role: "user",
@@ -157,27 +157,27 @@ export function CommandInput({
     });
     setIsQueryLoading(true);
     setLocalLoading(true);
-
+ 
     const formData = new FormData();
     formData.append("file", file);
-
+ 
     try {
       const res = await fetch("/api/cv-extract", {
         method: "POST",
         body: formData,
       });
-
+ 
       if (!res.ok) throw new Error(`Extract API алдаа: ${res.status}`);
-
+ 
       const result = await res.json();
-
+ 
       if (result.data) {
         onAddMessage({
           id: (Date.now() + 1).toString(),
           role: "ai",
           content: `✨ CV-г амжилттай уншлаа! Одоо энэ CV-г ямар ажилд зориулж сайжруулах вэ?`,
         });
-
+ 
         if (onExtract) {
           onExtract(result.data);
         }
@@ -195,7 +195,7 @@ export function CommandInput({
       if (fileInputRef.current) fileInputRef.current.value = "";
     }
   };
-
+ 
   return (
     <div className="p-6 bg-background border-t border-border">
       <div className="flex items-center gap-2 rounded-xl border border-input bg-muted/50 p-2 shadow-sm focus-within:border-foreground focus-within:bg-background transition-all">
@@ -206,7 +206,7 @@ export function CommandInput({
           onChange={handleFileUpload}
           className="hidden"
         />
-
+ 
         <Button
           type="button"
           variant="ghost"
@@ -217,7 +217,7 @@ export function CommandInput({
         >
           <Paperclip className="h-4 w-4" />
         </Button>
-
+ 
         <Button
           type="button"
           variant="ghost"
@@ -234,7 +234,7 @@ export function CommandInput({
         >
           <Mic className="h-4 w-4" />
         </Button>
-
+ 
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -243,7 +243,7 @@ export function CommandInput({
           className="border-0 shadow-none focus-visible:ring-0 flex-1 text-sm bg-transparent h-8 py-0"
           disabled={localLoading}
         />
-
+ 
         <Button
           onClick={() => handleSendText()}
           size="icon"

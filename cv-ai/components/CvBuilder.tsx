@@ -32,7 +32,7 @@ type FormValues = z.infer<typeof formSchema>;
 export default function CvBuilderPage() {
   const [isUploading, setIsUploading] = useState(false);
 
-  // 2. React Hook Form тохиргоо
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {

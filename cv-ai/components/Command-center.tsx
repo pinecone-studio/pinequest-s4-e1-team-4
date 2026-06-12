@@ -1,14 +1,15 @@
-"use client";
 
+"use client";
+ 
 import React, { useState, useEffect, useRef } from "react";
 import { Conversation, Message } from "./Conversation";
 import { CommandInput } from "./Command-input";
 import { Globe } from "lucide-react";
-
+ 
 interface CommandCenterProps {
   onExtract?: (data: any) => void;
 }
-
+ 
 export function CommandCenter({ onExtract }: CommandCenterProps) {
   const [language, setLanguage] = useState<"mn" | "en">("mn");
   const [messages, setMessages] = useState<Message[]>([
@@ -21,7 +22,7 @@ export function CommandCenter({ onExtract }: CommandCenterProps) {
   ]);
   const [isLoading, setIsLoading] = useState(false);
   const lastPlayedId = useRef<string | null>(null);
-
+ 
   const speak = async (text: string, lang: "mn" | "en") => {
     if (lang === "en") {
       window.speechSynthesis.cancel();
@@ -47,7 +48,7 @@ export function CommandCenter({ onExtract }: CommandCenterProps) {
       }
     }
   };
-
+ 
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     if (
@@ -59,10 +60,10 @@ export function CommandCenter({ onExtract }: CommandCenterProps) {
       speak(lastMessage.content, language);
     }
   }, [messages, language]);
-
+ 
   const addMessage = (message: Message) =>
     setMessages((prev) => [...prev, message]);
-
+ 
   return (
     <section className="flex h-screen w-full flex-col border-b border-border lg:w-1/2 lg:border-b-0 lg:border-r bg-background">
       <header className="flex items-center justify-between px-8 py-5 border-b border-border/40">
@@ -80,7 +81,7 @@ export function CommandCenter({ onExtract }: CommandCenterProps) {
             Live
           </span>
         </div>
-
+ 
         <button
           onClick={() => {
             const nextLang = language === "mn" ? "en" : "mn";
@@ -100,9 +101,9 @@ export function CommandCenter({ onExtract }: CommandCenterProps) {
           {language === "mn" ? "Монгол 🇲🇳" : "English 🇺🇸"}
         </button>
       </header>
-
+ 
       <Conversation messages={messages} isLoading={isLoading} />
-
+ 
       <CommandInput
         onAddMessage={addMessage}
         setIsQueryLoading={setIsLoading}
