@@ -1,8 +1,8 @@
-import db from "@/lib/db";
 import { ApolloServer } from "@apollo/server";
 import { startServerAndCreateNextHandler } from "@as-integrations/next";
+import db from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
-
+ 
 const typeDefs = `#graphql
   type User {
     id: ID!
@@ -11,15 +11,15 @@ const typeDefs = `#graphql
     name: String
     resumes: [Resume!]!
   }
-
+ 
   type Resume {
     id: ID!
     name: String!
     skills: [String!]!
-    rawJson: String! # JSON-ийг урд тал руу String хэлбэрээр шиднэ
+    rawJson: String!
     createdAt: String!
   }
-
+ 
   type UiText {
     id: ID!
     page: String!
@@ -27,37 +27,35 @@ const typeDefs = `#graphql
     valueMn: String!
     valueEn: String!
   }
-
-  # Дата унших хүсэлтүүд
+ 
   type Query {
     getCurrentUser: User
     getUiTextsByPage(page: String!): [UiText!]!
   }
-
-  # Дата өөрчлөх хүсэлтүүд
+ 
   type Mutation {
     saveResume(name: String!, skills: [String!]!, rawJson: String!): Resume!
   }
 `;
-
+ 
 const resolvers = {
   Query: {
     getCurrentUser: async (_: any, __: any, context: any) => {
       if (!context.clerkId) throw new Error("Нэвтрээгүй байна!");
-
+ 
       return await db.user.findUnique({
         where: { clerkId: context.clerkId },
         include: { resumes: true },
       });
     },
-
+ 
     getUiTextsByPage: async (_: any, args: { page: string }) => {
       return await db.uiText.findMany({
         where: { page: args.page },
       });
     },
   },
-
+ 
   Mutation: {
     saveResume: async (
       _: any,
@@ -65,13 +63,13 @@ const resolvers = {
       context: any,
     ) => {
       if (!context.clerkId) throw new Error("Нэвтрээгүй байна!");
-
+ 
       const user = await db.user.findUnique({
         where: { clerkId: context.clerkId },
       });
-
+ 
       if (!user) throw new Error("Хэрэглэгч бүртгэлгүй байна!");
-
+ 
       return await db.resume.create({
         data: {
           userId: user.id,
@@ -83,17 +81,17 @@ const resolvers = {
     },
   },
 };
-
+ 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
 });
-
+ 
 const handler = startServerAndCreateNextHandler(server, {
   context: async () => {
     const { userId } = await auth();
     return { clerkId: userId };
   },
 });
-
+ 
 export { handler as GET, handler as POST };
