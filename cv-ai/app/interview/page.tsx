@@ -12,13 +12,9 @@ export default function CareerCoachPage() {
   return (
     <div>
       {/**INTERVIEW, CV PAGE **/}
-      {/* <div className="flex h-screen w-screen">
+      <div className="flex h-screen w-screen">
         <CommandCenter onExtract={setResumeData} />
         <CanvasPanel resumeData={resumeData} />
-      </div> */}
-      {/** MAIN LANDING PAGE **/}
-      <div>
-        <Design />
       </div>
     </div>
   );
