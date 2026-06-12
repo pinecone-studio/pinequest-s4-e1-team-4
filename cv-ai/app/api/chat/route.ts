@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
            "message": "Хэрэглэгчид харуулах чиний хариулт (Жишээ нь: 'Би таны ур чадвар руу React болон Node.js-ийг нэмчихлээ')",
            "updatedData": {
              // Энд шинэчлэгдсэн CV-г бүхлээр нь буцаах (name, email, skills, experience, education). Хэрэв CV-г өөрчлөх шаардлагагүй бол null буцаах.
+             
            }
          }`;
 

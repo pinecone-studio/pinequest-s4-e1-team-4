@@ -14,9 +14,55 @@ datasource db {
 }
 
 model User {
+  id                String             @id @default(cuid())
+  clerkId           String             @unique
+  email             String             @unique
+  name              String?
+  resumes           Resume[]
+  interviewSessions InterviewSession[]
+  createdAt         DateTime           @default(now())
+}
+
+model Resume {
   id        String   @id @default(cuid())
-  clerkId   String   @unique
-  email     String   @unique
-  name      String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String
+  skills    String[]
+  rawJson   Json     
   createdAt DateTime @default(now())
+}
+
+model InterviewSession {
+  id          String        @id @default(cuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobTitle    String        
+  atsScore    Int           @default(0)   
+  wpmSpeed    Int           @default(0)   
+  fillerCount Int           @default(0)   
+  qaHistory   InterviewQA[]
+  createdAt   DateTime      @default(now())
+}
+
+model InterviewQA {
+  id         String           @id @default(cuid())
+  sessionId  String
+  session    InterviewSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  question   String          
+  userAnswer String          
+  starScore  Json            
+  feedback   String          
+  createdAt  DateTime         @default(now())
+}
+
+model UiText {
+  id        String   @id @default(cuid())
+  page      String   
+  key       String   
+  valueMn   String   
+  valueEn   String   
+  createdAt DateTime @default(now())
+
+  @@unique([page, key]) 
 }

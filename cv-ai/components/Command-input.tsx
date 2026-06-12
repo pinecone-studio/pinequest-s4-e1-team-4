@@ -3,37 +3,42 @@
 import React, { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Paperclip, ArrowUp, Loader2 } from "lucide-react";
+import { Paperclip, ArrowUp, Loader2, Mic } from "lucide-react";
 import { Message } from "./Conversation";
 
 interface CommandInputProps {
   messages: Message[];
   onAddMessage: (msg: Message) => void;
   setIsQueryLoading: (loading: boolean) => void;
-  // 1. ЭНД onExtract-ийг хүлээж авах хаалга нэмлээ
   onExtract?: (data: any) => void;
+  language?: "mn" | "en";
 }
 
 export function CommandInput({
   messages,
   onAddMessage,
   setIsQueryLoading,
-  onExtract, // 2. ЭНД задалж авлаа
+  onExtract,
+  language = "mn",
 }: CommandInputProps) {
   const [input, setInput] = useState("");
   const [localLoading, setLocalLoading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const chunksRef = useRef<Blob[]>([]);
 
-  const handleSendText = async () => {
-    if (!input.trim() || localLoading) return;
+  const handleSendText = async (overrideText?: string) => {
+    const textToSend = overrideText || input;
+    if (!textToSend.trim() || localLoading) return;
 
     const userMsg: Message = {
       id: Date.now().toString(),
       role: "user",
-      content: input,
+      content: textToSend,
     };
     onAddMessage(userMsg);
-    setInput("");
+    if (!overrideText) setInput("");
 
     setIsQueryLoading(true);
     setLocalLoading(true);
@@ -43,12 +48,12 @@ export function CommandInput({
         role: m.role === "ai" ? "assistant" : "user",
         content: m.content,
       }));
-      apiMessages.push({ role: "user", content: userMsg.content });
+      apiMessages.push({ role: "user", content: textToSend });
 
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: apiMessages }),
+        body: JSON.stringify({ messages: apiMessages, language }),
       });
 
       if (!res.ok) throw new Error(`Сүлжээний алдаа гарлаа: ${res.status}`);
@@ -69,6 +74,72 @@ export function CommandInput({
         role: "ai",
         content: "Уучлаарай, сүлжээний алдаа гарлаа. Серверээ шалгана уу.",
       });
+    } finally {
+      setIsQueryLoading(false);
+      setLocalLoading(false);
+    }
+  };
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      chunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunksRef.current.push(e.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
+        // 🔥 Хамгийн гол зассан хэсэг: 2.5KB-аас дээш үед л илгээнэ.
+        if (audioBlob.size > 2500) {
+          await sendToStt(audioBlob);
+        } else {
+          console.warn(
+            `Аудио хэт богино байна (${audioBlob.size} bytes). Бага зэрэг урт ярина уу.`,
+          );
+        }
+        stream.getTracks().forEach((track) => track.stop());
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const sendToStt = async (audioBlob: Blob) => {
+    setIsQueryLoading(true);
+    setLocalLoading(true);
+    const formData = new FormData();
+    formData.append("audio", audioBlob);
+
+    try {
+      const res = await fetch("/api/chimege-stt", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data.text) {
+          await handleSendText(data.text);
+        }
+      } else {
+        console.error("STT Алдаа гарлаа", res.status);
+      }
+    } catch (err) {
+      console.error(err);
     } finally {
       setIsQueryLoading(false);
       setLocalLoading(false);
@@ -104,10 +175,9 @@ export function CommandInput({
         onAddMessage({
           id: (Date.now() + 1).toString(),
           role: "ai",
-          content: `✨ CV-г амжилттай уншлаа! (Бүртгэгдсэн нэр: ${result.data.name || "Тодорхойгүй"}). Одоо энэ CV-г ямар ажилд зориулж сайжруулах вэ?`,
+          content: `✨ CV-г амжилттай уншлаа! Одоо энэ CV-г ямар ажилд зориулж сайжруулах вэ?`,
         });
 
-        // 3. 🔥 ХАМГИЙН ГОЛ НЬ: Дата амжилттай ирвэл баруун тал руугаа шиднэ!
         if (onExtract) {
           onExtract(result.data);
         }
@@ -148,22 +218,39 @@ export function CommandInput({
           <Paperclip className="h-4 w-4" />
         </Button>
 
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          onMouseDown={startRecording}
+          onMouseUp={stopRecording}
+          onMouseLeave={stopRecording}
+          className={`rounded-lg h-8 w-8 transition-all ${
+            isRecording
+              ? "text-red-500 bg-red-500/20 animate-pulse"
+              : "text-muted-foreground hover:text-foreground hover:bg-muted"
+          }`}
+          disabled={localLoading && !isRecording}
+        >
+          <Mic className="h-4 w-4" />
+        </Button>
+
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSendText()}
-          placeholder="Ask AI to rewrite, create cover letter, or upload CV..."
+          placeholder="Ask AI or hold Mic to speak..."
           className="border-0 shadow-none focus-visible:ring-0 flex-1 text-sm bg-transparent h-8 py-0"
           disabled={localLoading}
         />
 
         <Button
-          onClick={handleSendText}
+          onClick={() => handleSendText()}
           size="icon"
           className="rounded-lg h-8 w-8 bg-foreground text-background hover:bg-foreground/90"
           disabled={localLoading || !input.trim()}
         >
-          {localLoading ? (
+          {localLoading && !isRecording ? (
             <Loader2 className="h-3 w-3 animate-spin" />
           ) : (
             <ArrowUp className="h-4 w-4" />
