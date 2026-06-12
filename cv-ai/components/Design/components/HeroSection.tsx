@@ -1,3 +1,4 @@
+"use client";
 import {
   ArrowRight,
   BadgeCheck,
@@ -8,11 +9,14 @@ import {
   UploadCloud,
 } from "lucide-react";
 
+import { useClerk } from "@clerk/nextjs";
+
 type HeroSectionProps = {
   heroOffset: number;
 };
 
 export function HeroSection({ heroOffset }: HeroSectionProps) {
+  const { redirectToSignUp } = useClerk();
   return (
     <section className="relative min-h-screen overflow-hidden border-b border-[#d6ddd0] bg-[#f7f8f3]">
       <div
@@ -49,7 +53,7 @@ export function HeroSection({ heroOffset }: HeroSectionProps) {
           </a>
         </div>
 
-        <a
+        {/* <a
           href="#tools"
           className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#182019] px-5 text-sm font-semibold text-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:bg-[#2a352b]"
         >
@@ -58,7 +62,17 @@ export function HeroSection({ heroOffset }: HeroSectionProps) {
             className="h-4 w-4 transition duration-300 group-hover:translate-x-1"
             aria-hidden="true"
           />
-        </a>
+        </a> */}
+        <button
+          onClick={() => redirectToSignUp({ redirectUrl: "/sign-up" })}
+          className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#182019] px-5 text-sm font-semibold text-white shadow-sm transition duration-300 hover:-translate-y-0.5 hover:bg-[#2a352b]"
+        >
+          Эхлэх
+          <ArrowRight
+            className="h-4 w-4 transition duration-300 group-hover:translate-x-1"
+            aria-hidden="true"
+          />
+        </button>
       </nav>
 
       <div
