@@ -2,9 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { text } = await req.json();
-
-    if (!text) {
+    const body = await req.json().catch(() => null);
+    if (!body || !body.text) {
       return NextResponse.json(
         { error: "Текст хоосон байна" },
         { status: 400 },
@@ -18,19 +17,33 @@ export async function POST(req: NextRequest) {
         "x-api-key": process.env.TOPMEDIA_KEY || "",
       },
       body: JSON.stringify({
-        text: text,
+        text: body.text,
         voice_id: "en_us_male_01",
         language: "en",
       }),
     });
 
+    if (!response.ok) throw new Error(`TopMediai Error: ${response.status}`);
     const data = await response.json();
+    const audioUrl = data.data?.audio_url;
 
-    return NextResponse.json({
-      audio_url: data.data?.audio_url || null,
+    if (!audioUrl) {
+      return NextResponse.json(
+        { error: "Дууны линк үүссэнгүй" },
+        { status: 500 },
+      );
+    }
+
+    const audioFetchRes = await fetch(audioUrl);
+    if (!audioFetchRes.ok) throw new Error("Аудио файлыг татаж чадсангүй.");
+
+    const audioBuffer = await audioFetchRes.arrayBuffer();
+
+    return new NextResponse(audioBuffer, {
+      headers: { "Content-Type": "audio/mpeg" },
     });
   } catch (error: any) {
-    console.error("TTS API Error:", error);
+    console.error("TTS API Error:", error.message);
     return NextResponse.json(
       { error: "Дуу үүсгэхэд алдаа гарлаа" },
       { status: 500 },

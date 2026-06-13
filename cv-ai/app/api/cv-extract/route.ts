@@ -2,14 +2,13 @@ export const dynamic = "force-dynamic";
 
 import { NextRequest, NextResponse } from "next/server";
 import OpenAI from "openai";
-// @ts-ignore (TypeScript-д зориулсан жижиг хамгаалалт)
 import PDFParser from "pdf2json";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const SYSTEM_PROMPT = `Чи бол CV засах, мэдээлэл ялгах мэргэжлийн туслах систем юм. 
+const SYSTEM_PROMPT = `Чи бол CV засах, мэдээлэл ялгах мэртийн туслах систем юм. 
 Танд өгөгдсөн CV-нээс дараах бүтцийн дагуу мэдээллийг ялган авч, заавал ЦЭВЭРХЭН JSON форматаар буцаа.
 
 Бүтэц (JSON schema):
@@ -39,7 +38,6 @@ export async function POST(req: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // 1. ЗУРАГ БОЛОВСРУУЛАХ
     if (file.type.startsWith("image/")) {
       const base64Image = buffer.toString("base64");
       const response = await openai.chat.completions.create({
@@ -66,14 +64,12 @@ export async function POST(req: NextRequest) {
     } else if (file.type === "application/pdf") {
       const extractedText = await new Promise<string>((resolve, reject) => {
         const pdfParser = new PDFParser(null, true);
-
         pdfParser.on("pdfParser_dataError", (errData: any) =>
           reject(errData.parserError),
         );
-        pdfParser.on("pdfParser_dataReady", () => {
-          resolve(pdfParser.getRawTextContent());
-        });
-
+        pdfParser.on("pdfParser_dataReady", () =>
+          resolve(pdfParser.getRawTextContent()),
+        );
         pdfParser.parseBuffer(buffer);
       });
 

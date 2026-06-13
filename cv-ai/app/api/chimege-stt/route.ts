@@ -15,11 +15,16 @@ export async function POST(req: NextRequest) {
     const arrayBuffer = await audioFile.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    const token = process.env.CHIMEGE_STT?.trim() || "";
+    const token =
+      process.env.CHIMEGE_STT?.trim() ||
+      "0111a58374cfeafbd635316b154b2ee1188ff6e0aaa2b434643846e39f0144a6";
 
     if (!token) {
-      console.error("STT Алдаа: CHIMEGE_STT_SHORT түлхүүр олдсонгүй!");
-      return NextResponse.json({ error: "Түлхүүр олдсонгүй" }, { status: 500 });
+      console.error("STT Алдаа: CHIMEGE_STT түлхүүр олдсонгүй!");
+      return NextResponse.json(
+        { error: "Түлхүүр тохируулагдаагүй байна" },
+        { status: 500 },
+      );
     }
 
     const response = await fetch("https://api.chimege.com/v1.2/transcribe", {
@@ -39,7 +44,7 @@ export async function POST(req: NextRequest) {
         response.status,
         errorText,
       );
-      throw new Error(`Transcribe Error: ${response.status} - ${errorText}`);
+      throw new Error(`Transcribe Error: ${response.status}`);
     }
 
     const textData = await response.text();
