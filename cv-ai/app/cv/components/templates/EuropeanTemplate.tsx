@@ -55,7 +55,7 @@ export function EuropeanTemplate({ cv }: { cv: CvData }) {
           <p className="mb-5 text-[10px] font-bold uppercase tracking-[0.22em] text-sky-300">
             {cv.title || cv.targetRole}
           </p>
-          <h1 className="text-[54px] leading-[1.02] tracking-normal text-slate-800">
+          <h1 className="break-words text-[54px] leading-[1.02] tracking-normal text-slate-800">
             {cv.name || "Lana Brooks"}
           </h1>
         </header>

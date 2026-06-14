@@ -20,7 +20,7 @@ export function CompactTemplate({ cv }: { cv: CvData }) {
       <header className="border-b border-zinc-300 pb-3 mb-4">
         <div className="flex flex-col sm:flex-row justify-between gap-2">
           <div>
-            <h1 className="text-2xl font-bold text-zinc-900">
+            <h1 className="break-words text-2xl font-bold text-zinc-900">
               {cv.name || "Your Name"}
             </h1>
             <p className="text-[10px] font-semibold text-zinc-600">

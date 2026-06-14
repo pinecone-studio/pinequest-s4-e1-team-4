@@ -22,7 +22,7 @@ export function ModernTemplate({ cv }: { cv: CvData }) {
       <header className="border-b-2 border-blue-500 pb-6 mb-8">
         <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
           <div className="flex-1">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+            <h1 className="break-words bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-4xl font-bold text-transparent">
               {cv.name || "Your Name"}
             </h1>
             <p className="mt-2 text-lg font-semibold text-blue-600">

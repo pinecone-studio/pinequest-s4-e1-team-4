@@ -42,7 +42,7 @@ export function ExecutiveTemplate({ cv }: { cv: CvData }) {
           <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-sky-300">
             Executive Profile
           </p>
-          <h1 className="max-w-xl text-4xl font-black leading-tight tracking-normal">
+          <h1 className="max-w-xl break-words text-4xl font-black leading-tight tracking-normal">
             {cv.name || "Your Name"}
           </h1>
           <p className="mt-3 text-base font-semibold text-sky-200">

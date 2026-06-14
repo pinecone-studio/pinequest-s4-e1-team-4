@@ -54,17 +54,17 @@ export function ATSScore({ score, busy, onAnalyze }: ATSScoreProps) {
   }, [score]);
 
   return (
-    <section className="rounded-md border border-zinc-200 p-4 bg-gradient-to-br from-white to-slate-50 hover:border-zinc-300 transition">
+    <section className="rounded-md border border-zinc-200 bg-gradient-to-br from-white to-slate-50 p-4 transition hover:border-zinc-300 dark:border-[#173757] dark:from-[#0b1728] dark:to-[#07111f] dark:hover:border-[#38bdf8]/70">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-zinc-600">ATS Score</span>
-        <strong className="text-4xl tabular-nums font-bold text-black animate-pulse">
+        <span className="text-sm font-medium text-zinc-600 dark:text-[#9db7d3]">ATS Score</span>
+        <strong className="animate-pulse text-4xl font-bold tabular-nums text-black dark:text-white">
           {score}%
         </strong>
       </div>
 
-      <div className="relative mt-4 h-3 overflow-visible rounded-full bg-zinc-100 shadow-sm">
+      <div className="relative mt-4 h-3 overflow-visible rounded-full bg-zinc-100 shadow-sm dark:bg-[#173757]">
         <div
-          className="relative h-3 overflow-hidden rounded-full bg-gradient-to-r from-black via-zinc-800 to-black transition-all duration-1000 ease-out"
+          className="relative h-3 overflow-hidden rounded-full bg-gradient-to-r from-black via-zinc-800 to-black transition-all duration-1000 ease-out dark:from-[#0ea5e9] dark:via-[#38bdf8] dark:to-[#2563eb]"
           style={{ width: `${score}%` }}
         >
           <div className="ats-shimmer absolute inset-0 w-[40%] rounded-full bg-gradient-to-r from-transparent via-white/60 to-transparent" />
@@ -76,7 +76,7 @@ export function ATSScore({ score, busy, onAnalyze }: ATSScoreProps) {
       </div>
 
       <button
-        className="mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-black px-3 py-2.5 text-sm font-semibold text-white disabled:opacity-50 hover:bg-zinc-800 transition-all active:scale-95"
+        className="mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-black px-3 py-2.5 text-sm font-semibold text-white transition-all hover:bg-zinc-800 active:scale-95 disabled:opacity-50 dark:bg-[#0ea5e9] dark:hover:bg-[#0284c7]"
         disabled={busy}
         onClick={onAnalyze}
         type="button"
