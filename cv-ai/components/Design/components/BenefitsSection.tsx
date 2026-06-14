@@ -45,7 +45,7 @@ export function BenefitsSection({ isLightMode }: BenefitsSectionProps) {
        
         </div>
 
-        <div className="reveal relative z-10 mb-10 grid gap-3 sm:grid-cols-3">
+        <div className=" z-10 mb-10 grid gap-3 sm:grid-cols-3">
           {benefitHighlights.map((highlight) => (
             <div
               key={highlight.label}
@@ -69,30 +69,30 @@ export function BenefitsSection({ isLightMode }: BenefitsSectionProps) {
           ))}
         </div>
 
-        <div className="relative z-10 grid gap-4 md:grid-cols-3">
+        <div className=" grid gap-4 md:grid-cols-3">
           {benefits.map((benefit, index) => (
             <article
               key={benefit.title}
-              className={`modern-card reveal surface-hover group rounded-[1.75rem] border p-6 hover:border-[#38bdf8]/70 hover:shadow-[0_18px_45px_rgba(14,165,233,0.14)] ${
+              className={`rounded-[1.75rem] border p-6  ${
                 isLightMode
-                  ? "border-[#dbeafe] bg-[#f7fbff] hover:bg-[#eff8ff]"
-                  : "border-[#173757] bg-[#0b1728] hover:bg-[#0d1d33]"
+                  ? "border-[#dbeafe] bg-[#f7fbff]"
+                  : "border-[#173757] bg-[#0b1728] "
               }`}
               style={{ animationDelay: `${index * 0.12}s` }}
             >
               <div className="mb-6 flex items-start justify-between gap-4">
-                <span className="text-sm font-bold uppercase tracking-[0.18em] text-[#38bdf8]">
+                <span className="text-sm font-bold  text-[#38bdf8]">
                   0{index + 1}
                 </span>
                 <div
-                  className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl border transition duration-300 group-hover:-translate-y-0.5 ${
+                  className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl border  ${
                     isLightMode
                       ? "border-[#bae6fd] bg-white text-[#0284c7]"
                       : "border-[#25527f] bg-[#081525] text-[#7dd3fc]"
                   }`}
                 >
                   <benefit.icon
-                    className="icon-pop h-6 w-6 transition duration-300 group-hover:scale-110"
+                    className=" h-6 w-6  "
                     aria-hidden="true"
                   />
                 </div>
