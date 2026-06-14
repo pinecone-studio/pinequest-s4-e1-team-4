@@ -1,0 +1,45 @@
+"use client";
+
+import type { CvData } from "@/lib/cv/types";
+
+type StringCvField = {
+  [K in keyof CvData]: CvData[K] extends string ? K : never;
+}[keyof CvData];
+
+export const inputClass =
+  "h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm outline-none transition focus:border-emerald-600 dark:border-[#25527f] dark:bg-[#07111f] dark:text-white dark:placeholder:text-[#6f8ba8] dark:focus:border-[#38bdf8]";
+
+export const textClass =
+  "min-h-24 w-full resize-none rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-emerald-600 dark:border-[#25527f] dark:bg-[#07111f] dark:text-white dark:placeholder:text-[#6f8ba8] dark:focus:border-[#38bdf8]";
+
+export const inputs: { key: StringCvField; label: string; placeholder: string }[] = [
+  { key: "name", label: "Нэр", placeholder: "Бат-Эрдэнэ" },
+  { key: "title", label: "Одоогийн role", placeholder: "Frontend Developer" },
+  { key: "email", label: "Имэйл", placeholder: "name@mail.com" },
+  { key: "phone", label: "Утас", placeholder: "+976 9900 0000" },
+  { key: "location", label: "Байршил", placeholder: "Ulaanbaatar" },
+  { key: "link", label: "LinkedIn/GitHub", placeholder: "github.com/..." },
+];
+
+export function TextArea({
+  field,
+  label,
+  onField,
+  value,
+}: {
+  field: StringCvField;
+  label: string;
+  onField: <K extends keyof CvData>(field: K, value: CvData[K]) => void;
+  value: string;
+}) {
+  return (
+    <label className="block space-y-1.5">
+      <span className="text-xs font-medium text-zinc-600 dark:text-[#9db7d3]">{label}</span>
+      <textarea
+        className={textClass}
+        onChange={(event) => onField(field, event.target.value)}
+        value={value}
+      />
+    </label>
+  );
+}

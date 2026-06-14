@@ -1,4 +1,99 @@
 export const landingBackgroundStyles = String.raw`
+  .welcome-paper {
+    background-size:
+      140px 140px,
+      22px 22px,
+      auto;
+  }
+
+  .welcome-paper-light {
+    background:
+      radial-gradient(circle at 24% 18%, rgba(14, 165, 233, 0.08), transparent 28%),
+      linear-gradient(90deg, rgba(8, 17, 31, 0.035) 1px, transparent 1px),
+      linear-gradient(180deg, #f8fbff 0%, #eef7ff 100%);
+  }
+
+  .welcome-paper-dark {
+    background:
+      radial-gradient(circle at 22% 20%, rgba(56, 189, 248, 0.1), transparent 30%),
+      linear-gradient(90deg, rgba(125, 211, 252, 0.045) 1px, transparent 1px),
+      linear-gradient(180deg, #07111f 0%, #020617 100%);
+  }
+
+  .welcome-paper::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 28px 28px;
+    mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+    pointer-events: none;
+  }
+
+  .welcome-note {
+    isolation: isolate;
+  }
+
+  .welcome-note::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    border-radius: calc(1.75rem - 1px);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.08), transparent 45%),
+      repeating-linear-gradient(
+        -8deg,
+        transparent 0 16px,
+        rgba(56, 189, 248, 0.035) 16px 17px,
+        transparent 17px 34px
+      );
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .welcome-note-rule {
+    position: absolute;
+    left: 2rem;
+    right: 2rem;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.28), transparent);
+    opacity: 0.65;
+  }
+
+  .welcome-pencil-line {
+    position: absolute;
+    height: 5.8rem;
+    width: 12rem;
+    border-top: 2px solid rgba(56, 189, 248, 0.24);
+    border-radius: 999px;
+    transform: rotate(-12deg);
+    opacity: 0.75;
+  }
+
+  .welcome-pencil-line::after {
+    content: "";
+    position: absolute;
+    left: 18%;
+    top: -0.65rem;
+    height: 2px;
+    width: 54%;
+    border-radius: 999px;
+    background: rgba(56, 189, 248, 0.16);
+    transform: rotate(3deg);
+  }
+
+  .welcome-corner-mark {
+    position: absolute;
+    height: 4.25rem;
+    width: 4.25rem;
+    border-left: 2px solid rgba(56, 189, 248, 0.22);
+    border-top: 2px solid rgba(56, 189, 248, 0.22);
+    border-radius: 1.2rem 0 0 0;
+    opacity: 0.7;
+  }
+
   .welcome-mesh {
     background:
       linear-gradient(120deg, rgba(56, 189, 248, 0.2), transparent 34%),

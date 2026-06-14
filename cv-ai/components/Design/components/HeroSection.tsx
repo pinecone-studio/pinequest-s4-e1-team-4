@@ -2,7 +2,6 @@ import {
   ArrowRight,
   BadgeCheck,
   BrainCircuit,
-  ChevronDown,
   MessageSquareText,
   Moon,
   Sparkles,
@@ -116,7 +115,7 @@ export function HeroSection({
 
       <div
         id="home"
-        className="relative mx-auto grid max-w-7xl gap-10 px-5 pb-20 pt-10 sm:px-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:pb-24 lg:pt-16"
+        className="relative mx-auto grid max-w-7xl gap-10 px-5 pb-12 pt-8 sm:px-8 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:pb-14 lg:pt-10"
       >
         <div className="job-icon-cluster pointer-events-none absolute inset-0 hidden xl:block">
           {jobIconTiles.map((tile, index) => (
@@ -283,14 +282,6 @@ export function HeroSection({
           </div>
         </div>
       </div>
-
-      <a
-        href="#how"
-        aria-label="Дараагийн хэсэг"
-        className="absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-[#0284c7] md:flex"
-      >
-        <ChevronDown className="h-5 w-5 bounce-soft" aria-hidden="true" />
-      </a>
     </section>
   );
 }
