@@ -1,6 +1,17 @@
 import type { LucideIcon } from "lucide-react";
-import { FileText, Mic, ShieldCheck } from "lucide-react";
-
+import {
+  Building2,
+  CircleDollarSign,
+  FileText,
+  GraduationCap,
+  Hammer,
+  HardHat,
+  HeartPulse,
+  Mic,
+  Scale,
+  ShieldCheck,
+  UtensilsCrossed,
+} from "lucide-react";
 export const resumeSteps = [
   "CV эсвэл resume файлаа оруулна",
   "AI гол ур чадвар, туршлагыг тань ялгаж уншина",
@@ -35,8 +46,34 @@ export const benefits: Array<{
   },
 ];
 
+export const benefitHighlights = [
+  {
+    value: "3 алхам",
+    label: "Эхлэхэд ойлгомжтой",
+  },
+  {
+    value: "Монгол",
+    label: "Энгийн тайлбартай",
+  },
+  {
+    value: "Шууд",
+    label: "Зөвлөгөө авч болно",
+  },
+];
+
 export const activityItems = [
-  "CV оношилж байна",
-  "Гол ур чадварыг ялгаж байна",
-  "Ярилцлагын асуулт бэлдэж байна",
+];
+
+export const jobIconTiles: Array<{
+  icon: LucideIcon;
+  label: string;
+}> = [
+  { icon: HeartPulse, label: "Эмч" },
+  { icon: GraduationCap, label: "Багш" },
+  { icon: Scale, label: "Хууль" },
+  { icon: Building2, label: "Бизнес" },
+  { icon: UtensilsCrossed, label: "Тогооч" },
+  { icon: Hammer, label: "Инженер" },
+  { icon: CircleDollarSign, label: "Санхүү" },
+  { icon: HardHat, label: "Барилга" },
 ];
