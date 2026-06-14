@@ -1,4 +1,5 @@
 import { CheckCircle2, FileText, MessageSquareText } from "lucide-react";
+import Link from "next/link";
 
 import { interviewSteps, resumeSteps } from "../data";
 
@@ -36,7 +37,9 @@ export function ToolsSection({ isLightMode }: ToolsSectionProps) {
         </div>
 
         <div className="grid gap-5 lg:grid-cols-2">
-          <article
+          <Link
+            href="/cv"
+            aria-label="Resume хэсэг рүү очих"
             className={`tool-card scroll-fade-left surface-hover rounded-2xl border p-6 shadow-sm hover:border-[#38bdf8]/70 hover:shadow-[0_22px_55px_rgba(14,165,233,0.16)] ${
               isLightMode
                 ? "border-[#dbeafe] bg-white"
@@ -84,7 +87,7 @@ export function ToolsSection({ isLightMode }: ToolsSectionProps) {
                 </li>
               ))}
             </ul>
-          </article>
+          </Link>
 
           <article
             className={`tool-card scroll-fade-right surface-hover rounded-2xl border p-6 shadow-sm hover:border-[#60a5fa] ${

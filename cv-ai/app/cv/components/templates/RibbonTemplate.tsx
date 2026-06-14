@@ -23,7 +23,7 @@ export function RibbonTemplate({ cv }: { cv: CvData }) {
     <article className="print-area mx-auto grid min-h-[920px] w-full max-w-[760px] grid-cols-[250px_1fr] bg-[#fffefe] px-12 shadow-lg ring-1 ring-stone-200">
       <aside className="relative pb-12 pt-10 text-center">
         <div className="relative mx-auto mb-12 w-[210px] bg-blue-500 px-7 pb-16 pt-10 text-white [clip-path:polygon(0_0,100%_0,100%_78%,50%_100%,0_78%)]">
-          <h1 className="font-serif text-[36px] font-bold leading-none">
+          <h1 className="break-words font-serif text-[36px] font-bold leading-none">
             {cv.name || "Deborah Payne"}
           </h1>
           <p className="mt-4 font-serif text-lg font-bold">{cv.title || cv.targetRole}</p>

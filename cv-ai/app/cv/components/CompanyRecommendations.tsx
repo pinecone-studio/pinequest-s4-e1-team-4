@@ -11,22 +11,22 @@ export function CompanyRecommendations({
   if (companies.length === 0) return null;
 
   return (
-    <section className="rounded-md border border-zinc-200 p-4">
-      <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold">
-        <Building2 className="h-4 w-4 text-black" />
+    <section className="rounded-md border border-zinc-200 p-4 dark:border-[#173757] dark:bg-[#0b1728]">
+      <h2 className="mb-3 flex items-center gap-2 text-sm font-semibold text-zinc-950 dark:text-white">
+        <Building2 className="h-4 w-4 text-black dark:text-[#7dd3fc]" />
         Top Companies
       </h2>
       <ul className="space-y-3">
         {companies.map((company) => (
           <li
             key={company.id}
-            className="flex flex-col gap-2 pb-3 border-b last:border-0"
+            className="flex flex-col gap-2 border-b pb-3 last:border-0 dark:border-[#173757]"
           >
             <div className="flex items-center justify-between gap-2">
-              <span className="font-medium text-sm text-zinc-900">
+              <span className="text-sm font-medium text-zinc-900 dark:text-[#dcecff]">
                 {company.name}
               </span>
-              <span className="text-xs font-semibold text-black bg-yellow-100 px-2 py-1 rounded whitespace-nowrap">
+              <span className="whitespace-nowrap rounded bg-yellow-100 px-2 py-1 text-xs font-semibold text-black">
                 {company.score}%
               </span>
             </div>
@@ -35,13 +35,13 @@ export function CompanyRecommendations({
                 {company.matchedSkills.slice(0, 3).map((skill) => (
                   <span
                     key={skill}
-                    className="text-xs bg-zinc-100 text-zinc-700 px-2 py-0.5 rounded"
+                    className="rounded bg-zinc-100 px-2 py-0.5 text-xs text-zinc-700 dark:bg-[#173757] dark:text-[#dcecff]"
                   >
                     {skill}
                   </span>
                 ))}
                 {company.matchedSkills.length > 3 && (
-                  <span className="text-xs text-zinc-500 px-2 py-0.5">
+                  <span className="px-2 py-0.5 text-xs text-zinc-500 dark:text-[#9db7d3]">
                     +{company.matchedSkills.length - 3} more
                   </span>
                 )}

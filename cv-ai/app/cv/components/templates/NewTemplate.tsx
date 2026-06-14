@@ -75,7 +75,7 @@ export function NewTemplate({ cv }: { cv: CvData }) {
 
       <main className="relative pl-6">
         <header className="mb-9">
-          <h1 className="max-w-[360px] font-serif text-[58px] leading-[0.95] tracking-normal text-stone-800">
+          <h1 className="max-w-[360px] break-words font-serif text-[58px] leading-[0.95] tracking-normal text-stone-800">
             {cv.name || "Margot Simpson"}
           </h1>
           <p className="mt-7 text-[12px] font-bold uppercase tracking-[0.42em] text-stone-700">

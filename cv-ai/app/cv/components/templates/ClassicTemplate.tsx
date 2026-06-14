@@ -26,7 +26,7 @@ export function ClassicTemplate({ cv }: { cv: CvData }) {
           </svg>
         </div>
 
-        <h2 className="text-xl font-black uppercase tracking-wide text-center leading-tight">
+        <h2 className="break-words text-center text-xl font-black uppercase leading-tight tracking-wide">
           {cv.name || "Your Name"}
         </h2>
         <p className="text-[10px] uppercase tracking-[0.18em] text-zinc-400 mt-1 text-center">

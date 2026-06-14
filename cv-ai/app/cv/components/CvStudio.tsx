@@ -141,6 +141,8 @@ export function CvStudio() {
   const [result, setResult] = useState<AiResult>(() => buildAiResult(blankCv));
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [editorOpen, setEditorOpen] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   function update<K extends keyof CvData>(field: K, value: CvData[K]) {
     const next = { ...cv, [field]: value };
@@ -208,24 +210,31 @@ export function CvStudio() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f7f7f4] text-zinc-950">
-      <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[460px_1fr]">
+    <main className={`min-h-screen overflow-hidden bg-[#f7f7f4] text-zinc-950 transition-colors duration-300 dark:bg-[#07111f] dark:text-slate-100 xl:overflow-x-auto ${isDarkMode ? "dark" : ""}`}>
+      <div className="flex min-h-screen xl:min-w-[1220px]">
         <EditorPanel
           busy={busy}
           cv={cv}
+          isDarkMode={isDarkMode}
+          open={editorOpen}
           onAnalyze={analyze}
+          onClose={() => setEditorOpen(false)}
           onExtract={extractFromText}
           onField={update}
+          onToggleTheme={() => setIsDarkMode((current) => !current)}
           onUpload={upload}
           uploading={uploading}
         />
-        <PreviewPanel
-          busy={busy}
-          cv={cv}
-          onAnalyze={analyze}
-          onApplySummary={() => update("summary", result.improvedSummary)}
-          result={result}
-        />
+        <div className="min-w-0 flex-1">
+          <PreviewPanel
+            busy={busy}
+            cv={cv}
+            onAnalyze={analyze}
+            onApplySummary={() => update("summary", result.improvedSummary)}
+            onOpenEditor={() => setEditorOpen(true)}
+            result={result}
+          />
+        </div>
       </div>
       <Toaster richColors position="top-right" />
     </main>

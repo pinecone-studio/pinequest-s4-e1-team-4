@@ -7,10 +7,10 @@ type StringCvField = {
 }[keyof CvData];
 
 export const inputClass =
-  "h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm outline-none transition focus:border-emerald-600";
+  "h-10 w-full rounded-md border border-zinc-300 bg-white px-3 text-sm outline-none transition focus:border-emerald-600 dark:border-[#25527f] dark:bg-[#07111f] dark:text-white dark:placeholder:text-[#6f8ba8] dark:focus:border-[#38bdf8]";
 
 export const textClass =
-  "min-h-24 w-full resize-none rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-emerald-600";
+  "min-h-24 w-full resize-none rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-emerald-600 dark:border-[#25527f] dark:bg-[#07111f] dark:text-white dark:placeholder:text-[#6f8ba8] dark:focus:border-[#38bdf8]";
 
 export const inputs: { key: StringCvField; label: string; placeholder: string }[] = [
   { key: "name", label: "Нэр", placeholder: "Бат-Эрдэнэ" },
@@ -34,7 +34,7 @@ export function TextArea({
 }) {
   return (
     <label className="block space-y-1.5">
-      <span className="text-xs font-medium text-zinc-600">{label}</span>
+      <span className="text-xs font-medium text-zinc-600 dark:text-[#9db7d3]">{label}</span>
       <textarea
         className={textClass}
         onChange={(event) => onField(field, event.target.value)}
