@@ -29,14 +29,14 @@ export function HeroSection({
 
   return (
     <section
-      className={`relative overflow-hidden border-b transition-colors duration-500 ${
+      className={` ${
         isLightMode
           ? "border-[#cde8fb] bg-[#f7fbff]"
           : "border-transparent bg-[#07111f]"
       }`}
     >
       <div
-        className={`absolute inset-x-0 top-0  will-change-transform ${
+        className={`absolute inset-x-0 top-0  ${
           isLightMode
             ? "bg-[linear-gradient(120deg,rgba(125,211,252,0.36),rgba(219,234,254,0.72),transparent)]"
             : "bg-[linear-gradient(120deg,rgba(14,165,233,0.26),rgba(29,78,216,0.18),transparent)]"
@@ -45,7 +45,7 @@ export function HeroSection({
       />
       <div
         className="hero-grid absolute inset-0 opacity-60 will-change-transform"
-        style={{ transform: `translateY(${heroOffset * 0.08}px)` }}
+        style={{ transform: `translateY(${heroOffset * 0.10}px)` }}
       />
       <div className="scan-line absolute inset-x-0 top-0 h-28 opacity-70" />
       <div className="hero-aurora absolute inset-x-0 top-24 h-72" />
@@ -88,9 +88,9 @@ export function HeroSection({
             type="button"
             onClick={onToggleTheme}
             aria-label={isLightMode ? "Dark mode" : "Light mode"}
-            className={`grid h-11 w-11 place-items-center rounded-full border transition duration-300 hover:-translate-y-0.5 ${
+            className={`grid h-11 w-11 place-items-center rounded-full border transition duration-700 hover:-translate-y-2 ${
               isLightMode
-                ? "border-[#bae6fd] bg-white text-[#0284c7] hover:bg-[#e0f2fe]"
+                ? "border-[#bae6fd] bg-[#1f4f7a] text-[#0284c7] hover:bg-[#e0f2fe]"
                 : "border-[#1f4f7a] bg-[#081525] text-[#7dd3fc] hover:border-[#38bdf8]"
             }`}
           >
@@ -208,7 +208,7 @@ export function HeroSection({
               }`}
             >
               <div className={`relative overflow-hidden rounded-[1.5rem] p-5 ${isLightMode ? "bg-white text-[#08111f]" : "bg-[#030712] text-white"}`}>
-                <div className="panel-sheen absolute inset-0 opacity-80" />
+                <div className="" />
                 <div className="mb-5 flex items-center justify-between">
                   <div>
                     <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#0284c7]">
@@ -226,10 +226,10 @@ export function HeroSection({
 
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div
-                    className={`dashboard-card surface-hover group rounded-2xl border p-4 ${
+                    className={`  rounded-2xl border p-4 ${
                       isLightMode
-                        ? "border-[#dbeafe] bg-[#f1f8ff] hover:bg-[#e0f2fe]"
-                        : "border-transparent bg-white/10 hover:bg-white/15"
+                        ? "border-[#dbeafe] bg-[#f1f8ff] "
+                        : "border-transparent bg-white/10 "
                     }`}
                   >
                     <UploadCloud
@@ -246,7 +246,7 @@ export function HeroSection({
                       Гарчиг, ур чадвар, туршлагын хэсгийг сайжруулах саналтай.
                     </p>
                   </div>
-                  <div className="dashboard-card dashboard-card-active surface-hover group rounded-2xl bg-[#0ea5e9] p-4 text-white hover:bg-[#0284c7]">
+                  <div className=" rounded-2xl bg-[#0ea5e9] p-4 text-white">
                     <MessageSquareText
                       className="mb-5 h-7 w-7"
                       aria-hidden="true"
