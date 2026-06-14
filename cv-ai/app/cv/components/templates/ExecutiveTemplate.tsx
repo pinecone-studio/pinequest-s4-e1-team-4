@@ -76,7 +76,6 @@ export function ExecutiveTemplate({ cv }: { cv: CvData }) {
               ))}
             </div>
           </section>
-
         </aside>
 
         <main className="px-9 py-8">
