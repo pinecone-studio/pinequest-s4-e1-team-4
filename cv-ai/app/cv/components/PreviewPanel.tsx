@@ -1,6 +1,11 @@
 "use client";
 
-import { Download, FileText, PanelLeftOpen, PanelRightOpen } from "lucide-react";
+import {
+  Download,
+  FileText,
+  PanelLeftOpen,
+  PanelRightOpen,
+} from "lucide-react";
 import type { AiResult, CvData } from "@/lib/cv/types";
 import { CvDocument } from "./CvDocument";
 import { InsightsPanel } from "./InsightsPanel";
@@ -25,6 +30,7 @@ export function PreviewPanel({
   result,
 }: Props) {
   const cvRef = useRef<HTMLDivElement>(null);
+  const exportRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const [isExporting, setIsExporting] = useState(false);
   const [insightsOpen, setInsightsOpen] = useState(false);
@@ -52,10 +58,13 @@ export function PreviewPanel({
   }, [cv]);
 
   const downloadPDF = async () => {
-    if (!cvRef.current) return;
+    const template =
+      exportRef.current?.querySelector<HTMLElement>(".print-area");
+    if (!template) return;
+
     setIsExporting(true);
     try {
-      await generatePdfFromElement(cvRef.current, `${cv.name || "cv"}.pdf`);
+      await generatePdfFromElement(template, `${cv.name || "cv"}.pdf`);
     } finally {
       setIsExporting(false);
     }
@@ -68,13 +77,17 @@ export function PreviewPanel({
           <div className="flex items-center gap-2 min-w-0">
             <FileText className="h-5 w-5 flex-shrink-0 animate-pulse text-black dark:text-[#7dd3fc]" />
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-zinc-950 dark:text-white">CV Preview</p>
-              <p className="truncate text-xs capitalize text-zinc-600 dark:text-[#9db7d3]">{cv.template} template</p>
+              <p className="truncate text-sm font-semibold text-zinc-950 dark:text-white">
+                CV Preview
+              </p>
+              <p className="truncate text-xs capitalize text-zinc-600 dark:text-[#9db7d3]">
+                {cv.template} template
+              </p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <button
-              className="inline-flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white px-3 py-2.5 text-sm font-semibold text-zinc-800 shadow-sm transition-all hover:bg-zinc-100 active:scale-95 dark:border-[#25527f] dark:bg-[#07111f] dark:text-[#dcecff] dark:hover:bg-[#0b1e33] xl:hidden"
+              className="inline-flex items-center justify-center gap-2 rounded-md border border-zinc-200 bg-white px-3 py-2.5 text-sm font-semibold text-zinc-800 shadow-sm transition-all hover:bg-zinc-100 active:scale-95 dark:border-[#25527f] dark:bg-[#07111f] dark:text-[#dcecff] dark:hover:bg-[#0b1e33]"
               onClick={onOpenEditor}
               type="button"
             >
@@ -95,7 +108,9 @@ export function PreviewPanel({
               disabled={isExporting}
               type="button"
             >
-              <Download className={`h-4 w-4 transition-transform ${isExporting ? "animate-bounce" : ""}`} />
+              <Download
+                className={`h-4 w-4 transition-transform ${isExporting ? "animate-bounce" : ""}`}
+              />
               <span className="sm:hidden">{isExporting ? "..." : "PDF"}</span>
               <span className="hidden sm:inline">
                 {isExporting ? "Exporting..." : "Download PDF"}
@@ -133,6 +148,13 @@ export function PreviewPanel({
         result={result}
         onClose={() => setInsightsOpen(false)}
       />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed left-[-10000px] top-0 w-[760px] bg-white opacity-100"
+        ref={exportRef}
+      >
+        <CvDocument cv={cv} />
+      </div>
     </section>
   );
 }

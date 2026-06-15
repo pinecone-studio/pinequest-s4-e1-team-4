@@ -210,8 +210,8 @@ export function CvStudio() {
   }
 
   return (
-    <main className={`min-h-screen overflow-hidden bg-[#f7f7f4] text-zinc-950 transition-colors duration-300 dark:bg-[#07111f] dark:text-slate-100 xl:overflow-x-auto ${isDarkMode ? "dark" : ""}`}>
-      <div className="flex min-h-screen xl:min-w-[1220px]">
+    <main className={`min-h-screen overflow-hidden bg-[#f7f7f4] text-zinc-950 transition-colors duration-300 dark:bg-[#07111f] dark:text-slate-100 ${isDarkMode ? "dark" : ""}`}>
+      <div className="flex min-h-screen">
         <EditorPanel
           busy={busy}
           cv={cv}

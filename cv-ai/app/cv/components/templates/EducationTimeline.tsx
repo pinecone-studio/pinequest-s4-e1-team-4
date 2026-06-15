@@ -130,11 +130,95 @@ function lines(value: string) {
     .filter(Boolean);
 }
 
-function year(value: string) {
-  return value.split("-")[0] ?? "";
+const flatStyles: Record<
+  EducationVariant,
+  {
+    item: string;
+    meta: string;
+    textWrap: string;
+  }
+> = {
+  modern: {
+    item: "rounded-lg border border-blue-100 bg-white/70 px-5 py-4 shadow-sm",
+    meta: "shrink-0 rounded-full bg-blue-100 px-3 py-1 text-[11px] font-bold text-blue-700",
+    textWrap: "flex items-start justify-between gap-4",
+  },
+  classic: {
+    item: "border-b border-zinc-300 pb-4 last:border-b-0",
+    meta: "shrink-0 text-right text-[11px] font-bold italic text-zinc-500",
+    textWrap: "flex items-start justify-between gap-4",
+  },
+  compact: {
+    item: "border-b border-zinc-200 pb-2 last:border-b-0",
+    meta: "shrink-0 text-right text-[9px] font-bold text-zinc-500",
+    textWrap: "flex items-start justify-between gap-2",
+  },
+  executive: {
+    item: "rounded-md border border-sky-100 bg-sky-50/60 px-4 py-3",
+    meta: "shrink-0 rounded-md bg-white px-2.5 py-1 text-[10px] font-black uppercase tracking-wide text-sky-700 ring-1 ring-sky-100",
+    textWrap: "flex items-start justify-between gap-4",
+  },
+  european: {
+    item: "",
+    meta: "",
+    textWrap: "",
+  },
+  new: {
+    item: "pb-5",
+    meta: "shrink-0 text-right text-[11px] font-bold text-stone-500",
+    textWrap: "flex items-start justify-between gap-5",
+  },
+  ribbon: {
+    item: "pb-4",
+    meta: "shrink-0 font-serif text-[11px] italic text-stone-400",
+    textWrap: "flex items-start justify-between gap-4",
+  },
+  timeline: {
+    item: "",
+    meta: "",
+    textWrap: "",
+  },
+};
+
+function dateLabel(value: string) {
+  if (!value) return "";
+
+  const [year, month] = value.split("-");
+  const monthIndex = Number(month) - 1;
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  if (year && monthIndex >= 0 && monthIndex < months.length) {
+    return `${months[monthIndex]} ${year}`;
+  }
+
+  return year || value;
 }
 
-function StructuredItem({
+function dateRange(startDate: string, endDate: string) {
+  const start = dateLabel(startDate);
+  const end = endDate ? dateLabel(endDate) : start ? "Present" : "";
+
+  return [start, end].filter(Boolean).join(" - ");
+}
+
+function usesRail(variant: EducationVariant) {
+  return variant === "european" || variant === "timeline";
+}
+
+function RailStructuredItem({
   isLast,
   item,
   variant,
@@ -144,8 +228,8 @@ function StructuredItem({
   variant: EducationVariant;
 }) {
   const style = styles[variant];
-  const startYear = year(item.startDate);
-  const endYear = year(item.endDate) || "Present";
+  const start = dateLabel(item.startDate);
+  const end = item.endDate ? dateLabel(item.endDate) : start ? "Present" : "";
   const detailLine = [item.schoolName, item.address].filter(Boolean).join(". ");
 
   return (
@@ -158,8 +242,8 @@ function StructuredItem({
           )}
         </div>
         <div className={style.date}>
-          {startYear && <p>{startYear}</p>}
-          {endYear && <p>{endYear}</p>}
+          {start && <p>{start}</p>}
+          {end && <p>{end}</p>}
         </div>
       </div>
 
@@ -171,7 +255,32 @@ function StructuredItem({
   );
 }
 
-function LegacyItem({
+function FlatStructuredItem({
+  item,
+  variant,
+}: {
+  item: EducationItem;
+  variant: EducationVariant;
+}) {
+  const style = styles[variant];
+  const flat = flatStyles[variant];
+  const range = dateRange(item.startDate, item.endDate);
+  const detailLine = [item.schoolName, item.address].filter(Boolean).join(" | ");
+
+  return (
+    <div className={flat.item}>
+      <div className={flat.textWrap}>
+        <div className="min-w-0">
+          <h4 className={style.title}>{item.level || "Education Level"}</h4>
+          {detailLine && <p className={style.company}>{detailLine}</p>}
+        </div>
+        {range && <p className={flat.meta}>{range}</p>}
+      </div>
+    </div>
+  );
+}
+
+function RailLegacyItem({
   isLast,
   item,
   variant,
@@ -197,6 +306,23 @@ function LegacyItem({
   );
 }
 
+function FlatLegacyItem({
+  item,
+  variant,
+}: {
+  item: string;
+  variant: EducationVariant;
+}) {
+  const style = styles[variant];
+  const flat = flatStyles[variant];
+
+  return (
+    <div className={flat.item}>
+      <p className={style.body}>{item}</p>
+    </div>
+  );
+}
+
 export function EducationTimeline({
   cv,
   variant = "modern",
@@ -213,24 +339,32 @@ export function EducationTimeline({
   return (
     <section className={style.section}>
       <h3 className={style.heading}>Education</h3>
-      <div className="space-y-1">
+      <div className={usesRail(variant) ? "space-y-1" : "space-y-3"}>
         {structuredItems.length > 0
-          ? structuredItems.map((item, index) => (
-              <StructuredItem
-                isLast={index === structuredItems.length - 1}
-                item={item}
-                key={item.id}
-                variant={variant}
-              />
-            ))
-          : legacyItems.map((item, index) => (
-              <LegacyItem
-                isLast={index === legacyItems.length - 1}
-                item={item}
-                key={index}
-                variant={variant}
-              />
-            ))}
+          ? structuredItems.map((item, index) =>
+              usesRail(variant) ? (
+                <RailStructuredItem
+                  isLast={index === structuredItems.length - 1}
+                  item={item}
+                  key={item.id}
+                  variant={variant}
+                />
+              ) : (
+                <FlatStructuredItem item={item} key={item.id} variant={variant} />
+              ),
+            )
+          : legacyItems.map((item, index) =>
+              usesRail(variant) ? (
+                <RailLegacyItem
+                  isLast={index === legacyItems.length - 1}
+                  item={item}
+                  key={index}
+                  variant={variant}
+                />
+              ) : (
+                <FlatLegacyItem item={item} key={index} variant={variant} />
+              ),
+            )}
       </div>
     </section>
   );

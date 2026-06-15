@@ -56,7 +56,9 @@ export function ATSScore({ score, busy, onAnalyze }: ATSScoreProps) {
   return (
     <section className="rounded-md border border-zinc-200 bg-gradient-to-br from-white to-slate-50 p-4 transition hover:border-zinc-300 dark:border-[#173757] dark:from-[#0b1728] dark:to-[#07111f] dark:hover:border-[#38bdf8]/70">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-medium text-zinc-600 dark:text-[#9db7d3]">ATS Score</span>
+        <span className="text-sm font-medium text-zinc-600 dark:text-[#9db7d3]">
+          CV Үнэлгээ
+        </span>
         <strong className="animate-pulse text-4xl font-bold tabular-nums text-black dark:text-white">
           {score}%
         </strong>
