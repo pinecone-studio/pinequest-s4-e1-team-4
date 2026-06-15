@@ -1,6 +1,5 @@
 import {
   ArrowRight,
-  BrainCircuit,
   FileText,
   Mail,
   MessageSquareText,
@@ -63,14 +62,9 @@ export function Footer({ isLightMode }: FooterProps) {
         <div className="grid gap-10 lg:grid-cols-[1.15fr_1.85fr]">
           <div className="max-w-xl">
             <Link href="#home" className="inline-flex items-center gap-3">
-              <span
-                className={`grid h-12 w-12 place-items-center rounded-xl border transition duration-300 hover:rotate-3 hover:scale-105 ${iconBoxClass}`}
-              >
-                <BrainCircuit className="h-6 w-6" aria-hidden="true" />
-              </span>
               <span>
                 <span className={`block text-lg font-bold ${textPrimary}`}>
-                  Interview AI
+                  ЯрилцлагаAI
                 </span>
                 <span className={`block text-sm font-medium ${textMuted}`}>
                   CV ба ярилцлагын туслах
@@ -134,41 +128,20 @@ export function Footer({ isLightMode }: FooterProps) {
           className={`mt-10 grid gap-4 border-t pt-6 md:grid-cols-[1fr_auto] md:items-center ${subtleBorder}`}
         >
           <div className={`flex flex-wrap items-center gap-4 text-sm ${textMuted}`}>
-            <span className="inline-flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-[#38bdf8]" aria-hidden="true" />
-              Хувийн мэдээллийг хүндэтгэнэ
-            </span>
-            <a
-              href="mailto:hello@interview-ai.mn"
-              className="inline-flex items-center gap-2 transition hover:text-[#38bdf8]"
-            >
-              <Mail className="h-4 w-4 text-[#38bdf8]" aria-hidden="true" />
-              hello@interview-ai.mn
-            </a>
+          
+
           </div>
 
           <div className="flex items-center gap-3">
-            <Link
-              href="/cv"
-              aria-label="Resume builder"
-              className={`grid h-10 w-10 place-items-center rounded-full border transition duration-300 hover:-translate-y-0.5 hover:border-[#38bdf8] ${iconBoxClass}`}
-            >
-              <FileText className="h-4 w-4" aria-hidden="true" />
-            </Link>
-            <a
-              href="#tools"
-              aria-label="Interview дасгал"
-              className={`grid h-10 w-10 place-items-center rounded-full border transition duration-300 hover:-translate-y-0.5 hover:border-[#38bdf8] ${iconBoxClass}`}
-            >
-              <MessageSquareText className="h-4 w-4" aria-hidden="true" />
-            </a>
+          
+           
           </div>
         </div>
 
         <div
           className={`mt-6 flex flex-col gap-3 text-xs sm:flex-row sm:items-center sm:justify-between ${textMuted}`}
         >
-          <p>© 2026 Interview AI. Бүх эрх хуулиар хамгаалагдсан.</p>
+          <p>2026 ЯрилцлагаAI. </p>
           <p>Монгол хэл дээрх CV ба ярилцлагын бэлтгэл.</p>
         </div>
       </div>
