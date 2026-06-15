@@ -3,8 +3,10 @@ import type { ReactNode } from "react";
 import { splitItems } from "@/lib/cv/local-ai";
 import { EducationTimeline } from "./EducationTimeline";
 import { ExperienceTimeline } from "./ExperienceTimeline";
+import { Mail, MapPin, Phone, Link } from "lucide-react";
 
-const heading = "text-[11px] font-bold uppercase tracking-[0.28em] text-stone-700";
+const heading =
+  "text-[11px] font-bold uppercase tracking-[0.28em] text-stone-700";
 
 function lines(value: string) {
   return value
@@ -13,13 +15,7 @@ function lines(value: string) {
     .filter(Boolean);
 }
 
-function Section({
-  title,
-  children,
-}: {
-  title: string;
-  children: ReactNode;
-}) {
+function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section>
       <h3 className={`${heading} mb-4`}>{title}</h3>
@@ -42,7 +38,12 @@ function ContactRow({ icon, value }: { icon: string; value: string }) {
 export function NewTemplate({ cv }: { cv: CvData }) {
   const skills = splitItems(cv.skills).length
     ? splitItems(cv.skills)
-    : ["Organizational skills", "Time management", "Adaptability", "Leadership"];
+    : [
+        "Organizational skills",
+        "Time management",
+        "Adaptability",
+        "Leadership",
+      ];
   const projects = lines(cv.projects);
   const role = cv.title || cv.targetRole;
 
@@ -55,7 +56,7 @@ export function NewTemplate({ cv }: { cv: CvData }) {
         <ul className="space-y-4">
           <ContactRow icon="@" value={cv.email} />
           <ContactRow icon="L" value={cv.location} />
-          <ContactRow icon="P" value={cv.phone} />
+          <ContactRow icon="☎" value={cv.phone} />
           <ContactRow icon="W" value={cv.link} />
         </ul>
 
@@ -63,20 +64,22 @@ export function NewTemplate({ cv }: { cv: CvData }) {
           <Section title="Skills">
             <ul className="space-y-4">
               {skills.map((skill) => (
-                <li key={skill} className="list-disc text-[11px] leading-5 text-stone-600">
+                <li
+                  key={skill}
+                  className="list-disc text-[11px] leading-5 text-stone-600"
+                >
                   {skill}
                 </li>
               ))}
             </ul>
           </Section>
-
         </div>
       </aside>
 
       <main className="relative pl-6">
         <header className="mb-9">
           <h1 className="max-w-[360px] break-words font-serif text-[58px] leading-[0.95] tracking-normal text-stone-800">
-            {cv.name || "Margot Simpson"}
+            {cv.name || "Таны нэр"}
           </h1>
           <p className="mt-7 text-[12px] font-bold uppercase tracking-[0.42em] text-stone-700">
             {role || "Accountant"}
@@ -98,7 +101,10 @@ export function NewTemplate({ cv }: { cv: CvData }) {
             <Section title="Projects">
               <div className="space-y-4">
                 {projects.map((item, index) => (
-                  <p key={index} className="text-[11px] leading-5 text-stone-600">
+                  <p
+                    key={index}
+                    className="text-[11px] leading-5 text-stone-600"
+                  >
                     {item}
                   </p>
                 ))}

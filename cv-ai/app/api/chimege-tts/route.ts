@@ -2,16 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { text } = await req.json();
-
-    if (!text) {
+    const body = await req.json().catch(() => null);
+    if (!body || !body.text) {
       return NextResponse.json(
         { error: "Текст хоосон байна" },
         { status: 400 },
       );
     }
 
-    const cleanText = text
+    const cleanText = body.text
       .replace(/CV/gi, "Си Ви")
       .replace(/AI/gi, "Эй Ай")
       .replace(/[^а-яА-ЯөӨүҮёЁ\s\?\!\.\-\'\"\,\:0-9]/g, "")
@@ -25,7 +24,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const token = process.env.CHIMEGE_TTS;
+    const token = process.env.CHIMEGE_TTS?.trim();
     if (!token) {
       return NextResponse.json({ error: "Түлхүүр олдсонгүй" }, { status: 500 });
     }
@@ -43,15 +42,12 @@ export async function POST(req: NextRequest) {
     if (!response.ok) {
       const errorText = await response.text();
       console.error("Chimege TTS API Алдаа:", response.status, errorText);
-      throw new Error(`Chimege TTS Error: ${response.status} - ${errorText}`);
+      throw new Error(`Chimege TTS Error: ${response.status}`);
     }
 
     const audioBuffer = await response.arrayBuffer();
-
     return new NextResponse(audioBuffer, {
-      headers: {
-        "Content-Type": "audio/x-wav",
-      },
+      headers: { "Content-Type": "audio/x-wav" },
     });
   } catch (error: any) {
     console.error("TTS Бэкэнд Алдаа:", error.message);

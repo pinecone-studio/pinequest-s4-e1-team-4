@@ -13,7 +13,7 @@ interface CanvasPanelProps {
   resumeData?: ResumeData | null;
 }
 
-function ResumeDocument({ data }: { data?: ResumeData | null }) {
+export function ResumeDocument({ data }: { data?: ResumeData | null }) {
   const displayData = data || {
     name: "Alex Morgan",
     email: "alex.morgan@email.com",

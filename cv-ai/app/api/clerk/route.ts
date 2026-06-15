@@ -9,8 +9,8 @@ export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
 
   if (!WEBHOOK_SECRET) {
-    console.error("❌ Error: CLERK_WEBHOOK_SECRET is missing!");
-    return new Response("Error: Missing CLERK_WEBHOOK_SECRET", { status: 500 });
+    console.error("❌ Error: CLERK_WEBHOOK_SECRET missing!");
+    return new Response("Error: Missing secret", { status: 500 });
   }
 
   const headerPayload = await headers();
@@ -19,12 +19,10 @@ export async function POST(req: Request) {
   const svix_signature = headerPayload.get("svix-signature");
 
   if (!svix_id || !svix_timestamp || !svix_signature) {
-    console.error("❌ Error: Svix headers are missing!");
     return new Response("Error: Missing svix headers", { status: 400 });
   }
 
   const body = await req.text();
-
   const wh = new Webhook(WEBHOOK_SECRET);
   let evt: WebhookEvent;
 
@@ -35,50 +33,36 @@ export async function POST(req: Request) {
       "svix-signature": svix_signature,
     }) as WebhookEvent;
   } catch (err) {
-    console.error("❌ Error: Svix verification failed:", err);
     return new Response("Error: Verification error", { status: 400 });
   }
 
   const eventType = evt.type;
-  console.log(`✅ [WEBHOOK АМЖИЛТТАЙ ИРЛЭЭ]: ${eventType}`);
 
   if (eventType === "user.created" || eventType === "user.updated") {
     const { id, email_addresses, first_name, last_name } = evt.data;
     const email = email_addresses?.[0]?.email_address;
     const name = `${first_name || ""} ${last_name || ""}`.trim();
 
-    if (!email) {
-      console.warn(`⚠️ [Анхааруулга]: User ${id} и-мэйл хаяггүй байна.`);
-      return new Response("Error: Missing email address", { status: 400 });
-    }
+    if (!email) return new Response("Error: Missing email", { status: 400 });
 
     try {
       if (eventType === "user.created") {
         await db.user.create({
-          data: {
-            clerkId: id,
-            email: email,
-            name: name || null,
-          },
+          data: { clerkId: id, email: email, name: name || null },
         });
-        console.log(`🎉 [АМЖИЛТТАЙ]: Шинэ хэрэглэгч баазад орлоо (${email})`);
-        return new Response("User created successfully", { status: 201 });
+        return new Response("User created", { status: 201 });
       } else {
         await db.user.update({
           where: { clerkId: id },
-          data: {
-            email: email,
-            name: name || null,
-          },
+          data: { email: email, name: name || null },
         });
-        console.log(`🔄 [АМЖИЛТТАЙ]: Хэрэглэгч шинэчлэгдлээ (${email})`);
-        return new Response("User updated successfully", { status: 200 });
+        return new Response("User updated", { status: 200 });
       }
     } catch (error) {
-      console.error("❌ Prisma Database Error:", error);
-      return new Response("Internal Database Error", { status: 500 });
+      console.error("Prisma Error:", error);
+      return new Response("Database Error", { status: 500 });
     }
   }
 
-  return new Response("Webhook processed", { status: 200 });
+  return new Response("Processed", { status: 200 });
 }
