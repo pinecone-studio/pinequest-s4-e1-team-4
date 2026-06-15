@@ -6,8 +6,13 @@ const isPublicRoute = createRouteMatcher([
   "/api/clerk(.*)",
   "/api/chat(.*)",
   "/api/tts(.*)",
+  "/api/chimege-tts(.*)",
   "/api/cv-extract(.*)",
   "/api/cv-ai(.*)",
+  "/api/voice(.*)",
+  "/api/chimege-stt(.*)",
+  "/api/interview(.*)",
+  "/api/evaluate(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, request) => {

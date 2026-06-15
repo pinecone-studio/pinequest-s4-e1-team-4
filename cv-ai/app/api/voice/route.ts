@@ -1,6 +1,9 @@
+export const dynamic = "force-dynamic";
+
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
+  console.log("=== VOICE API РУУ ОРЖ ИРЛЭЭ ===");
   try {
     const formData = await req.formData();
     const audioFile = formData.get("audio") as Blob | null;
@@ -17,7 +20,7 @@ export async function POST(req: NextRequest) {
 
     const token =
       process.env.CHIMEGE_STT?.trim() ||
-      "0111a58374cfeafbd635316b154b2ee1188ff6e0aaa2b434643846e39f0144a6";
+      "a6348fec742e286cfa4a28d38df9d14f7440bc3dc67bc4c8e1811a883c843a60";
 
     if (!token) {
       console.error("STT Алдаа: CHIMEGE_STT түлхүүр олдсонгүй!");
