@@ -150,7 +150,7 @@ export const blankCv: CvData = {
   location: "",
   link: "",
   photo: "",
-  targetRole: "Frontend Developer",
+  targetRole: "",
   summary: "",
   skills: "",
   experience: "",

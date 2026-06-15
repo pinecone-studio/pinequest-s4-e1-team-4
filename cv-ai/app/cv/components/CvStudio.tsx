@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import {
@@ -18,7 +18,7 @@ import { buildAiResult, extractCvFromText } from "@/lib/cv/local-ai";
 import { EditorPanel } from "./EditorPanel";
 import { PreviewPanel } from "./PreviewPanel";
 
-type LoosePatch = Partial<CvData> & {
+export type LoosePatch = Partial<CvData> & {
   experience?: unknown;
   skills?: unknown;
   education?: unknown;
@@ -104,7 +104,7 @@ function normalizeEducationItems(value: unknown): EducationItem[] {
   });
 }
 
-function normalizeCvPatch(patch: LoosePatch): Partial<CvData> {
+export function normalizeCvPatch(patch: LoosePatch): Partial<CvData> {
   const next: Partial<CvData> = { ...patch };
 
   if (patch.skills !== undefined) {
@@ -136,13 +136,32 @@ function normalizeCvPatch(patch: LoosePatch): Partial<CvData> {
   return next;
 }
 
-export function CvStudio() {
-  const [cv, setCv] = useState<CvData>(blankCv);
+type CvStudioProps = {
+  cv?: CvData;
+  onCvChange?: (cv: CvData) => void;
+};
+
+export function CvStudio({ cv: controlledCv, onCvChange }: CvStudioProps = {}) {
+  const [internalCv, setInternalCv] = useState<CvData>(blankCv);
+  const cv = controlledCv ?? internalCv;
   const [result, setResult] = useState<AiResult>(() => buildAiResult(blankCv));
   const [busy, setBusy] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (controlledCv) {
+      setResult(buildAiResult(controlledCv, controlledCv.cvText));
+    }
+  }, [controlledCv]);
+
+  function setCv(next: CvData) {
+    if (!controlledCv) {
+      setInternalCv(next);
+    }
+    onCvChange?.(next);
+  }
 
   function update<K extends keyof CvData>(field: K, value: CvData[K]) {
     const next = { ...cv, [field]: value };
@@ -210,8 +229,8 @@ export function CvStudio() {
   }
 
   return (
-    <main className={`min-h-screen overflow-hidden bg-[#f7f7f4] text-zinc-950 transition-colors duration-300 dark:bg-[#07111f] dark:text-slate-100 xl:overflow-x-auto ${isDarkMode ? "dark" : ""}`}>
-      <div className="flex min-h-screen xl:min-w-[1220px]">
+    <main className={`min-h-screen overflow-hidden bg-[#f7f7f4] text-zinc-950 transition-colors duration-300 dark:bg-[#07111f] dark:text-slate-100 ${isDarkMode ? "dark" : ""}`}>
+      <div className="flex min-h-screen">
         <EditorPanel
           busy={busy}
           cv={cv}

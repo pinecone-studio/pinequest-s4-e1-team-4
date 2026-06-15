@@ -2,6 +2,7 @@ import type { CvData } from "@/lib/cv/types";
 import { splitItems } from "@/lib/cv/local-ai";
 import { EducationTimeline } from "./EducationTimeline";
 import { ExperienceTimeline } from "./ExperienceTimeline";
+import { UserRound } from "lucide-react";
 
 const sectionTitle = "text-[11px] font-bold uppercase tracking-[0.16em]";
 
@@ -28,6 +29,17 @@ export function ModernTemplate({ cv }: { cv: CvData }) {
             <p className="mt-2 text-lg font-semibold text-blue-600">
               {cv.title || cv.targetRole}
             </p>
+          </div>
+          <div className="grid h-24 w-24 shrink-0 place-items-center overflow-hidden rounded-full border-4 border-white bg-blue-100 text-blue-500 shadow-md ring-1 ring-blue-200">
+            {cv.photo ? (
+              <img
+                alt={cv.name ? `${cv.name} profile` : "Profile"}
+                className="h-full w-full object-cover object-center"
+                src={cv.photo}
+              />
+            ) : (
+              <UserRound className="h-10 w-10" strokeWidth={1.5} />
+            )}
           </div>
           <div className="text-left sm:text-right text-xs text-slate-600 space-y-1">
             {cv.email && <p>{cv.email}</p>}

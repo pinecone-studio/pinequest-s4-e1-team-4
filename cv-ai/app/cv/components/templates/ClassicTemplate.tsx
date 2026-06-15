@@ -2,6 +2,7 @@ import type { CvData } from "@/lib/cv/types";
 import { splitItems } from "@/lib/cv/local-ai";
 import { EducationTimeline } from "./EducationTimeline";
 import { ExperienceTimeline } from "./ExperienceTimeline";
+import { UserRound } from "lucide-react";
 
 function lines(value: string) {
   return value
@@ -20,10 +21,15 @@ export function ClassicTemplate({ cv }: { cv: CvData }) {
     <article className="print-area mx-auto flex min-h-[920px] w-full max-w-[760px] overflow-hidden bg-[#f0f0f0] shadow-sm ring-1 ring-zinc-300 text-sm">
       <aside className="w-[240px] min-w-[240px] bg-zinc-900 text-white flex flex-col items-center pt-10 px-6 pb-8">
         <div className="w-[120px] h-[120px] rounded-full border-4 border-white overflow-hidden bg-zinc-700 flex items-center justify-center mb-6 flex-shrink-0">
-          <svg viewBox="0 0 80 80" className="w-full h-full" fill="none">
-            <circle cx="40" cy="32" r="18" fill="#9ca3af" />
-            <ellipse cx="40" cy="72" rx="28" ry="20" fill="#9ca3af" />
-          </svg>
+          {cv.photo ? (
+            <img
+              alt={cv.name ? `${cv.name} profile` : "Profile"}
+              className="h-full w-full object-cover object-center"
+              src={cv.photo}
+            />
+          ) : (
+            <UserRound className="h-14 w-14 text-zinc-400" strokeWidth={1.4} />
+          )}
         </div>
 
         <h2 className="break-words text-center text-xl font-black uppercase leading-tight tracking-wide">

@@ -5,12 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Paperclip, ArrowUp, Loader2, Mic } from "lucide-react";
 import { Message } from "./Conversation";
+import type { CvData } from "@/lib/cv/types";
  
 interface CommandInputProps {
   messages: Message[];
   onAddMessage: (msg: Message) => void;
   setIsQueryLoading: (loading: boolean) => void;
   onExtract?: (data: any) => void;
+  onCvUpdate?: (data: any) => void;
+  resumeData?: CvData;
   language?: "mn" | "en";
 }
  
@@ -19,6 +22,8 @@ export function CommandInput({
   onAddMessage,
   setIsQueryLoading,
   onExtract,
+  onCvUpdate,
+  resumeData,
   language = "mn",
 }: CommandInputProps) {
   const [input, setInput] = useState("");
@@ -53,7 +58,7 @@ export function CommandInput({
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: apiMessages, language }),
+        body: JSON.stringify({ messages: apiMessages, resumeData, language }),
       });
  
       if (!res.ok) throw new Error(`Сүлжээний алдаа гарлаа: ${res.status}`);
@@ -66,6 +71,10 @@ export function CommandInput({
           role: "ai",
           content: data.message.content,
         });
+      }
+
+      if (data.updatedData) {
+        onCvUpdate?.(data.updatedData);
       }
     } catch (err) {
       console.error(err);
@@ -181,6 +190,7 @@ export function CommandInput({
         if (onExtract) {
           onExtract(result.data);
         }
+        onCvUpdate?.(result.data);
       }
     } catch (err) {
       console.error(err);

@@ -44,7 +44,9 @@ export function InsightsPanel({
         }`}
       >
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-zinc-200 bg-white/95 px-4 py-3 backdrop-blur dark:border-[#173757] dark:bg-[#081525]/95 xl:hidden">
-          <p className="text-sm font-semibold text-zinc-950 dark:text-white">ATS Insights</p>
+          <p className="text-sm font-semibold text-zinc-950 dark:text-white">
+            CV Дүгнэлт
+          </p>
           <button
             aria-label="ATS sidebar хаах"
             className="grid h-9 w-9 place-items-center rounded-full border border-zinc-200 text-zinc-700 transition hover:bg-zinc-100 dark:border-[#25527f] dark:text-[#dcecff] dark:hover:bg-[#0b1e33]"
@@ -61,7 +63,10 @@ export function InsightsPanel({
           <Panel icon={Target} title="Advice">
             <ul className="space-y-2">
               {result.advice.map((item) => (
-                <li key={item} className="flex gap-2 text-sm leading-6 text-zinc-700 dark:text-[#dcecff]">
+                <li
+                  key={item}
+                  className="flex gap-2 text-sm leading-6 text-zinc-700 dark:text-[#dcecff]"
+                >
                   <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-black dark:text-[#7dd3fc]" />
                   <span>{item}</span>
                 </li>
@@ -91,7 +96,9 @@ export function InsightsPanel({
             <ul className="space-y-2 text-sm leading-6 text-zinc-700 dark:text-[#dcecff]">
               {result.interview.map((item, i) => (
                 <li key={i} className="flex gap-3">
-                  <span className="flex-shrink-0 text-lg font-bold text-black dark:text-[#7dd3fc]">→</span>
+                  <span className="flex-shrink-0 text-lg font-bold text-black dark:text-[#7dd3fc]">
+                    →
+                  </span>
                   <span>{item}</span>
                 </li>
               ))}

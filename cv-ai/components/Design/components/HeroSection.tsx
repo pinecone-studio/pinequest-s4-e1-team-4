@@ -1,6 +1,7 @@
-"use client";
 import {
   ArrowRight,
+  BadgeCheck,
+  BrainCircuit,
   MessageSquareText,
   Moon,
   Sparkles,
@@ -46,7 +47,7 @@ export function HeroSection({
       />
       <div
         className="hero-grid absolute inset-0 opacity-60 will-change-transform"
-        style={{ transform: `translateY(${heroOffset * 0.1}px)` }}
+        style={{ transform: `translateY(${heroOffset * 0.10}px)` }}
       />
       <div className="scan-line absolute inset-x-0 top-0 h-98 opacity-70" />
       <div className="hero-aurora absolute inset-x-0 top-24 h-72" />
@@ -55,7 +56,7 @@ export function HeroSection({
         <a href="#home" className="flex items-center gap-3">
           <span>
             <span className={`block text-base font-bold ${textPrimary}`}>
-              ЯрилцлагаAI
+              Interview AI
             </span>
             <span className={`block text-xs font-medium ${textMuted}`}>
               CV ба ярилцлагын туслах
@@ -63,14 +64,15 @@ export function HeroSection({
           </span>
         </a>
 
-        <div
-          className={`hidden items-center gap-7 text-sm font-semibold ${textMuted} md:flex`}
-        >
+        <div className={`hidden items-center gap-7 text-sm font-semibold ${textMuted} md:flex`}>
           <a className="transition hover:text-[#38bdf8]" href="#intro">
             Танилцуулга
           </a>
           <a className="transition hover:text-[#38bdf8]" href="#tools">
             Хэрэгслүүд
+          </a>
+          <a className="transition hover:text-[#38bdf8]" href="#footer">
+            Холбоо
           </a>
         </div>
 

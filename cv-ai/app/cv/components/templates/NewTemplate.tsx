@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { splitItems } from "@/lib/cv/local-ai";
 import { EducationTimeline } from "./EducationTimeline";
 import { ExperienceTimeline } from "./ExperienceTimeline";
-import { Mail, MapPin, Phone, Link } from "lucide-react";
+import { UserRound } from "lucide-react";
 
 const heading =
   "text-[11px] font-bold uppercase tracking-[0.28em] text-stone-700";
@@ -53,6 +53,18 @@ export function NewTemplate({ cv }: { cv: CvData }) {
       <div className="pointer-events-none absolute -bottom-24 -right-20 h-64 w-64 rounded-full bg-[radial-gradient(circle_at_center,rgba(251,146,130,0.34),rgba(251,146,130,0.08)_62%,transparent_74%)] blur-sm" />
 
       <aside className="relative pr-8">
+        <div className="mb-9 grid h-[146px] w-[146px] place-items-center overflow-hidden rounded-full bg-stone-100 text-stone-400 ring-1 ring-stone-200">
+          {cv.photo ? (
+            <img
+              alt={cv.name ? `${cv.name} profile` : "Profile"}
+              className="h-full w-full object-cover object-center"
+              src={cv.photo}
+            />
+          ) : (
+            <UserRound className="h-16 w-16" strokeWidth={1.4} />
+          )}
+        </div>
+
         <ul className="space-y-4">
           <ContactRow icon="@" value={cv.email} />
           <ContactRow icon="L" value={cv.location} />
