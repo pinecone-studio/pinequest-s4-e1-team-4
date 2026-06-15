@@ -43,7 +43,7 @@ export function ExperienceEditor({ cv, onField }: Props) {
           Experience/ажлын туршлага/
         </span>
         <button
-          className="flex h-8 items-center justify-center gap-1.5 rounded-md border border-zinc-300 px-2.5 text-xs font-semibold text-zinc-800 transition hover:border-black hover:bg-slate-50 active:scale-95 dark:border-[#25527f] dark:text-[#dcecff] dark:hover:border-[#38bdf8] dark:hover:bg-[#0b1e33]"
+          className="flex h-8 items-center justify-center gap-1.5 rounded-md border border-zinc-300 px-2.5 text-xs font-semibold text-zinc-800 transition hover:border-[#0ea5e9] hover:bg-slate-50 active:scale-95 dark:border-[#25527f] dark:text-[#dcecff] dark:hover:border-[#38bdf8] dark:hover:bg-[#0b1e33]"
           onClick={addExperience}
           type="button"
         >
@@ -77,38 +77,48 @@ export function ExperienceEditor({ cv, onField }: Props) {
             <div className="grid grid-cols-2 gap-2">
               <ExperienceInput
                 label="Албан тушаалын нэр"
-                onChange={(value) => updateExperience(item.id, "jobTitle", value)}
+                onChange={(value) =>
+                  updateExperience(item.id, "jobTitle", value)
+                }
                 placeholder="Frontend Developer"
                 value={item.jobTitle}
               />
               <ExperienceInput
                 label="Компани"
-                onChange={(value) => updateExperience(item.id, "companyName", value)}
+                onChange={(value) =>
+                  updateExperience(item.id, "companyName", value)
+                }
                 placeholder="Company LLC"
                 value={item.companyName}
               />
               <ExperienceInput
                 className="col-span-2"
                 label="Ажлын хаяг"
-                onChange={(value) => updateExperience(item.id, "address", value)}
+                onChange={(value) =>
+                  updateExperience(item.id, "address", value)
+                }
                 placeholder="Ulaanbaatar, Mongolia"
                 value={item.address}
               />
               <ExperienceInput
                 label="Орсон огноо"
-                onChange={(value) => updateExperience(item.id, "startDate", value)}
+                onChange={(value) =>
+                  updateExperience(item.id, "startDate", value)
+                }
                 type="date"
                 value={item.startDate}
               />
               <ExperienceInput
                 label="Гарсан огноо"
-                onChange={(value) => updateExperience(item.id, "endDate", value)}
+                onChange={(value) =>
+                  updateExperience(item.id, "endDate", value)
+                }
                 type="date"
                 value={item.endDate}
               />
               <label className="col-span-2 space-y-1">
                 <span className="text-[11px] font-medium uppercase tracking-wide text-zinc-500 dark:text-[#9db7d3]">
-                  Functions and achievements
+                  Үүрэг, амжилтууд
                 </span>
                 <textarea
                   className={`${textClass} min-h-28`}
@@ -119,7 +129,7 @@ export function ExperienceEditor({ cv, onField }: Props) {
                       event.target.value,
                     )
                   }
-                  placeholder="Built reusable components&#10;Improved page speed by 35%"
+                  placeholder="- Developed and maintained the front-end of the company's main product using React and TypeScript."
                   value={item.functionsAchievements}
                 />
               </label>

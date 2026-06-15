@@ -54,7 +54,7 @@ export function EducationEditor({ cv, onField }: Props) {
           Education /боловсрол/
         </span>
         <button
-          className="flex h-8 items-center justify-center gap-1.5 rounded-md border border-zinc-300 px-2.5 text-xs font-semibold text-zinc-800 transition hover:border-black hover:bg-slate-50 active:scale-95 dark:border-[#25527f] dark:text-[#dcecff] dark:hover:border-[#38bdf8] dark:hover:bg-[#0b1e33]"
+          className="flex h-8 items-center justify-center gap-1.5 rounded-md border border-zinc-300 px-2.5 text-xs font-semibold text-zinc-800 transition hover:border-[#0ea5e9] hover:bg-slate-50 active:scale-95 dark:border-[#25527f] dark:text-[#dcecff] dark:hover:border-[#38bdf8] dark:hover:bg-[#0b1e33]"
           onClick={addEducation}
           type="button"
         >

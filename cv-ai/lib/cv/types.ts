@@ -15,6 +15,7 @@ export type CvData = {
   phone: string;
   location: string;
   link: string;
+  photo: string;
   targetRole: string;
   summary: string;
   skills: string;
@@ -148,6 +149,7 @@ export const blankCv: CvData = {
   phone: "",
   location: "",
   link: "",
+  photo: "",
   targetRole: "Frontend Developer",
   summary: "",
   skills: "",
