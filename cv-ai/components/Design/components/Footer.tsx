@@ -1,10 +1,7 @@
-import {
-  ArrowRight,
-  FileText,
-  Mail,
-  MessageSquareText,
-  ShieldCheck,
-} from "lucide-react";
+
+"use client";
+import { useEffect, useState, useRef } from "react";
+import { ArrowRight, FileText, Mail, MessageSquareText, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
 type FooterProps = {
@@ -23,17 +20,16 @@ const footerLinks = [
   {
     title: "Хэрэгсэл",
     links: [
-      { label: "Resume builder", href: "/cv" },
-      { label: "Interview дасгал", href: "#tools" },
-      { label: "AI зөвлөмж", href: "#intro" },
+      { label: "Resume Builder", href: "/cv" },
+      { label: "Interview Дасгал", href: "#tools" },
     ],
   },
   {
     title: "Тусламж",
     links: [
-      { label: "CV оношилгоо", href: "/cv" },
-      { label: "Ярилцлагын бэлтгэл", href: "#tools" },
-      { label: "Санал хүсэлт", href: "mailto:hello@interview-ai.mn" },
+      { label: "CV Оношилгоо", href: "/cv" },
+      { label: "Ярилцлагын Бэлтгэл", href: "#tools" },
+      { label: "Санал Хүсэлт", href: "mailto:hello@interview-ai.mn" },
     ],
   },
 ];
@@ -41,109 +37,118 @@ const footerLinks = [
 export function Footer({ isLightMode }: FooterProps) {
   const textPrimary = isLightMode ? "text-[#08111f]" : "text-white";
   const textMuted = isLightMode ? "text-[#526b82]" : "text-[#9db7d3]";
-  const panelClass = isLightMode ? "footer-glass-light" : "footer-glass-dark";
-  const iconBoxClass = isLightMode
-    ? "border-[#bae6fd] bg-white text-[#0284c7]"
-    : "border-[#25527f] bg-[#081525] text-[#7dd3fc]";
-  const subtleBorder = isLightMode ? "border-[#dbeafe]" : "border-[#173757]";
+  const subtleBorder = isLightMode ? "border-gray-200/60" : "border-white/10";
+
+  // Скролл хийх үед тодрох логик
+  const [isIntersecting, setIsIntersecting] = useState(false);
+  const footerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Footer-ийн 10% нь дэлгэцэнд харагдаж эхэлмэгц blur-ийг арилгана
+        setIsIntersecting(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    if (footerRef.current) {
+      observer.observe(footerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <footer
       id="footer"
-      className={`relative border-t px-5 py-12 transition-colors duration-500 sm:px-8 sm:py-16 ${
+      ref={footerRef}
+      className={`relative border-t transition-all duration-700 ease-out ${
+        isIntersecting 
+          ? "blur-none opacity-100 translate-y-0" 
+          : "blur-md opacity-70 translate-y-4"
+      } ${
         isLightMode
-          ? "border-[#dbeafe] bg-white text-[#08111f]"
-          : "border-[#0f2942] bg-[#07111f] text-white"
+          ? "border-gray-100 bg-[#f8faff] text-[#08111f]"
+          : "border-white/[0.03] bg-[#030712] text-white"
       }`}
     >
-      <div
-        className={`footer-glass mx-auto max-w-7xl rounded-[1.75rem] px-5 py-8 sm:px-8 sm:py-10 ${panelClass}`}
-      >
-        <div className="grid gap-10 lg:grid-cols-[1.15fr_1.85fr]">
-          <div className="max-w-xl">
-            <Link href="#home" className="inline-flex items-center gap-3">
-              <span>
-                <span className={`block text-lg font-bold ${textPrimary}`}>
+      <div className="mx-auto max-w-7xl px-6 py-12 sm:px-8 sm:py-16">
+
+        <div className="grid gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-24">
+          <div className="flex flex-col items-start space-y-5">
+            <Link href="#home" className="group flex items-center gap-2.5">
+              <div>
+                <span className={`block text-lg font-bold tracking-tight ${textPrimary}`}>
                   ЯрилцлагаAI
                 </span>
-                <span className={`block text-sm font-medium ${textMuted}`}>
-                  CV ба ярилцлагын туслах
+                <span className={`block text-xs font-medium tracking-wide ${textMuted}`}>
+                  CV БА ЯРИЛЦЛАГЫН ТУСЛАХ
                 </span>
-              </span>
+              </div>
             </Link>
 
-            <p className={`mt-5 max-w-lg text-sm leading-7 ${textMuted}`}>
+            <p className={`text-sm leading-6 max-w-sm ${textMuted}`}>
               Resume-гээ ойлгомжтой болгож, ярилцлагын асуултаар бэлтгэн,
               дараагийн алхмаа монголоор тодорхой харахад туслах AI платформ.
             </p>
 
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+            <div className="pt-2">
               <Link
                 href="/cv"
-                className="group inline-flex h-11 items-center justify-center gap-2 rounded-full bg-[#0ea5e9] px-5 text-sm font-bold text-white shadow-[0_14px_35px_rgba(14,165,233,0.25)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#0284c7]"
+                className="inline-flex h-10 items-center justify-center gap-1.5 rounded-full bg-[#0ea5e9] px-4.5 text-xs font-semibold text-white shadow-lg shadow-[#0ea5e9]/15 transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#0284c7]"
               >
-                CV эхлүүлэх
-                <ArrowRight
-                  className="h-4 w-4 transition duration-300 group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
+                Эхлүүлэх
+                <ArrowRight className="h-3.5 w-3.5" />
               </Link>
-              <a
-                href="#tools"
-                className={`inline-flex h-11 items-center justify-center rounded-full border px-5 text-sm font-bold transition duration-300 hover:-translate-y-0.5 hover:border-[#38bdf8] ${
-                  isLightMode
-                    ? "border-[#bae6fd] bg-white/80 text-[#164766] hover:bg-[#e0f2fe]"
-                    : "border-[#1f4f7a] bg-[#081525]/80 text-[#dcecff] hover:bg-[#0b1e33]"
-                }`}
-              >
-                Хэрэгслүүд харах
-              </a>
             </div>
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-3">
+          <div className="grid gap-8 grid-cols-2 sm:grid-cols-3">
             {footerLinks.map((group) => (
-              <nav key={group.title} aria-label={group.title}>
-                <p className={`text-sm font-bold ${textPrimary}`}>
+              <div key={group.title} className="space-y-4">
+                <p className={`text-xs font-bold uppercase tracking-wider ${isLightMode ? "text-[#0ea5e9]" : "text-[#38bdf8]"}`}>
                   {group.title}
                 </p>
-                <ul className="mt-4 space-y-3">
+                <ul className="space-y-2.5">
                   {group.links.map((link) => (
                     <li key={`${group.title}-${link.label}`}>
                       <Link
                         href={link.href}
-                        className={`text-sm font-medium transition hover:text-[#38bdf8] ${textMuted}`}
+                        className={`text-sm transition-colors duration-200 hover:text-[#0ea5e9] ${textMuted}`}
                       >
                         {link.label}
                       </Link>
                     </li>
                   ))}
                 </ul>
-              </nav>
+              </div>
             ))}
           </div>
         </div>
 
-        <div
-          className={`mt-10 grid gap-4 border-t pt-6 md:grid-cols-[1fr_auto] md:items-center ${subtleBorder}`}
-        >
-          <div className={`flex flex-wrap items-center gap-4 text-sm ${textMuted}`}>
-          
-
+        <div className={`mt-12 flex flex-col gap-4 border-t pt-6 sm:flex-row sm:items-center sm:justify-between ${subtleBorder}`}>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            
           </div>
-
-          <div className="flex items-center gap-3">
-          
-           
+          <div>
+            <a
+              href="mailto:hello@interview-ai.mn"
+              className={`inline-flex items-center gap-2 text-xs font-semibold border-b pb-0.5 transition-colors hover:text-[#0ea5e9] ${isLightMode ? "border-gray-300" : "border-white/10"}`}
+            >
+             
+            </a>
           </div>
         </div>
 
-        <div
-          className={`mt-6 flex flex-col gap-3 text-xs sm:flex-row sm:items-center sm:justify-between ${textMuted}`}
-        >
-          <p>2026 ЯрилцлагаAI. </p>
-          <p>Монгол хэл дээрх CV ба ярилцлагын бэлтгэл.</p>
+        <div className={`mt-6 flex flex-col gap-3 text-[11px] sm:flex-row sm:items-center sm:justify-between ${textMuted}`}>
+          <p> {new Date().getFullYear()} ЯрилцлагаAI</p>
+          <div className="flex items-center gap-1">
+
+            <span>Монгол хэл дээрх ухаалаг карьер хөтөч</span>
+          </div>
         </div>
+
       </div>
     </footer>
   );

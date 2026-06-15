@@ -1,7 +1,6 @@
 "use client";
 import {
   ArrowRight,
-  BadgeCheck,
   MessageSquareText,
   Moon,
   Sparkles,
@@ -9,7 +8,7 @@ import {
   UploadCloud,
 } from "lucide-react";
 import { jobIconTiles } from "../data";
-import { useClerk } from "@clerk/nextjs";
+import Nevter from "@/app/components/Clerk";
 
 type HeroSectionProps = {
   heroOffset: number;
@@ -22,7 +21,6 @@ export function HeroSection({
   isLightMode,
   onToggleTheme,
 }: HeroSectionProps) {
-  const { redirectToSignUp } = useClerk();
 
   const textPrimary = isLightMode ? "text-[#08111f]" : "text-white";
   const textMuted = isLightMode ? "text-[#526b82]" : "text-[#9db7d3]";
@@ -50,12 +48,11 @@ export function HeroSection({
         className="hero-grid absolute inset-0 opacity-60 will-change-transform"
         style={{ transform: `translateY(${heroOffset * 0.1}px)` }}
       />
-      <div className="scan-line absolute inset-x-0 top-0 h-28 opacity-70" />
+      <div className="scan-line absolute inset-x-0 top-0 h-98 opacity-70" />
       <div className="hero-aurora absolute inset-x-0 top-24 h-72" />
 
       <nav className="relative mx-auto flex max-w-7xl animate-[slideDown_0.75s_ease-out_both] items-center justify-between px-5 py-5 sm:px-8">
         <a href="#home" className="flex items-center gap-3">
-      
           <span>
             <span className={`block text-base font-bold ${textPrimary}`}>
               ЯрилцлагаAI
@@ -94,14 +91,7 @@ export function HeroSection({
               <Sun className="h-5 w-5" aria-hidden="true" />
             )}
           </button>
-          <a
-            href="#tools"
-            className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#0ea5e9] px-5 text-sm font-semibold text-white shadow-[0_14px_35px_rgba(14,165,233,0.28)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#0284c7]"
-          >
-            Нэвтрэх
-
-          </a>
-       =
+          <Nevter />
         </div>
       </nav>
 
@@ -122,6 +112,7 @@ export function HeroSection({
             </div>
           ))}
         </div>
+        
         <div
           id="intro"
           className={`intro-gradient animate-[fadeUp_0.85s_ease-out_both] rounded-[2rem] p-5 will-change-transform sm:p-6 ${
@@ -135,17 +126,18 @@ export function HeroSection({
           <div
             className={`hero-kicker mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold shadow-sm backdrop-blur ${chipClass}`}
           >
-            <Sparkles className="h-4 w-4 text-[#0284c7]" aria-hidden="true" />
+
             Ажилд ороход туслах ухаалаг хөтөч
           </div>
 
           <p
             className={`hero-copy mt-5 max-w-2xl text-lg leading-8 ${textMuted}`}
           >
-            Interview AI нь таны resume-г ойлгомжтой болгож, ажилд орох
+            ЯрилцлагаAI нь таны resume-г ойлгомжтой болгож, ажилд орох
             ярилцлагын асуултаар дасгал хийлгэнэ. Хаанаас эхлэхээ мэдэхгүй
             байсан ч дараагийн алхам бүрийг монголоор тодорхой харуулна.
           </p>
+          
           <div className="job-icon-mobile mt-5 flex flex-wrap gap-3 xl:hidden">
             {jobIconTiles.map((tile) => (
               <div
@@ -159,6 +151,7 @@ export function HeroSection({
               </div>
             ))}
           </div>
+          
           <div className="stagger-actions mt-7 flex flex-col gap-3 sm:flex-row">
             <a
               href="#tools"
@@ -188,18 +181,7 @@ export function HeroSection({
           style={{ transform: `translateY(${heroOffset * 0.06}px)` }}
         >
           <div className="hero-panel relative z-10">
-            <div
-              className={`absolute -left-2 top-14 hidden rounded-2xl border px-4 py-3 text-sm font-semibold shadow-xl backdrop-blur float-slow lg:block ${chipClass}`}
-            >
-              <span className="mr-2 inline-block h-2 w-2 rounded-full bg-[#38bdf8] pulse-dot" />
-              3 минутын дотор эхэлнэ
-            </div>
-            <div
-              className={`absolute -right-1 bottom-14 hidden rounded-2xl border px-4 py-3 text-sm font-semibold shadow-xl backdrop-blur float-slow-reverse lg:block ${chipClass}`}
-            >
-              <span className="mr-2 inline-block h-2 w-2 rounded-full bg-[#60a5fa] pulse-dot" />
-              Шууд зөвлөгөө өгнө
-            </div>
+          
             <div
               className={`dashboard-shell rounded-[2rem] border p-4 backdrop-blur ${
                 isLightMode
@@ -208,83 +190,79 @@ export function HeroSection({
               }`}
             >
               <div
-                className={`relative overflow-hidden rounded-[1.5rem] p-5 ${isLightMode ? "bg-white text-[#08111f]" : "bg-[#030712] text-white"}`}
+                className={`relative overflow-hidden rounded-[1.5rem] p-6 ${
+                  isLightMode ? "bg-white text-[#08111f]" : "bg-[#030712] text-white"
+                }`}
               >
-                <div className="" />
-                <div className="mb-5 flex items-center justify-between">
+                <div className="mb-6 flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#0284c7]">
-                      Өнөөдрийн бэлтгэл
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#0ea5e9]">
+                      
                     </p>
-                    <h3 className="mt-2 text-2xl font-semibold">
-                      Junior Frontend Developer
+                    <h3 className="mt-1 text-xl font-bold">
+                      Ирээдүйн карьераа эхлүүлэхэд бэлэн үү?
                     </h3>
                   </div>
-                  
                 </div>
 
-                <div className="grid gap-3 sm:grid-cols-2">
+                <div className="grid gap-4 sm:grid-cols-2">
+
                   <div
-                    className={`  rounded-2xl border p-4 ${
+                    className={`relative overflow-hidden rounded-2xl border p-5 transition duration-300 hover:scale-[1.01] ${
                       isLightMode
-                        ? "border-[#dbeafe] bg-[#f1f8ff] "
-                        : "border-transparent bg-white/10 "
+                        ? "border-[#dbeafe] bg-[#f1f8ff]"
+                        : "border-white/5 bg-white/[0.03]"
                     }`}
                   >
-                    <UploadCloud
-                      className="mb-5 h-7 w-7 text-[#7dd3fc]"
-                      aria-hidden="true"
-                    />
-                    <p
-                      className={`text-sm ${isLightMode ? "text-[#526b82]" : "text-white/65"}`}
-                    >
-                      Resume оношилгоо
+                    <UploadCloud className="mb-4 h-8 w-8 text-[#0ea5e9]" aria-hidden="true" />
+                    <p className={`text-sm font-semibold ${isLightMode ? "text-[#526b82]" : "text-white/70"}`}>
+                      Алхам 1: CV / Resume
                     </p>
-                    <p className="metric-count mt-2 text-3xl font-semibold">
-                      82%
+                    <p className="mt-2 text-lg font-bold leading-6">Өөрийн CV-гээ оруулах</p>
+                    <p className={`mt-2 text-xs leading-5 ${isLightMode ? "text-[#526b82]" : "text-white/50"}`}>
+                      AI таны ур чадварт тохирсон асуултуудыг бэлдэхийн тулд эхлээд файлаа уншуулна уу.
                     </p>
-                    <p
-                      className={`mt-3 text-sm leading-6 ${isLightMode ? "text-[#526b82]" : "text-white/70"}`}
-                    >
-                      Гарчиг, ур чадвар, туршлагын хэсгийг сайжруулах саналтай.
-                    </p>
+                   
                   </div>
-                  <div className=" rounded-2xl bg-[#0ea5e9] p-4 text-white">
+
+
+                  <div
+                    className={`relative overflow-hidden rounded-2xl border p-5 transition duration-300 hover:scale-[1.01] ${
+                      isLightMode
+                        ? "border-[#dbeafe] bg-[#f1f8ff]"
+                        : "border-white/5 bg-white/[0.03]"
+                    }`}
+                  >
                     <MessageSquareText
-                      className="mb-5 h-7 w-7"
+                      className="mb-4 h-8 w-8 text-[#0ea5e9]"
                       aria-hidden="true"
                     />
-                    <p className="text-sm text-white/80">Ярилцлагын дасгал</p>
-                    <p className="metric-count mt-2 text-3xl font-semibold">
-                      12 асуулт
+                    
+                    <p className={`text-sm font-semibold ${isLightMode ? "text-[#526b82]" : "text-white/70"}`}>
+                      Алхам 2: Сургуулилт
                     </p>
-                    <p className="mt-3 text-sm leading-6 text-white/80">
-                      Өөрийгөө танилцуулах, төсөл тайлбарлах асуултууд бэлэн.
+                    <p className="mt-2 text-lg font-bold leading-6">Дуут ярилцлага</p>
+                    <p className={`mt-2 text-xs leading-5 ${isLightMode ? "text-[#526b82]" : "text-white/50"}`}>
+                      CV-гээ оруулсны дараа таны чиглэлээр хиймэл оюун ухаан шууд асуулт асууж эхэлнэ.
                     </p>
+
                   </div>
                 </div>
 
                 <div
                   className={`mt-4 rounded-2xl border p-4 ${
                     isLightMode
-                      ? "border-[#dbeafe] bg-[#f7fbff]"
-                      : "border-white/10 bg-white/5"
+                      ? "border-[#bae6fd] bg-[#f0f9ff]"
+                      : "border-white/10 bg-white/[0.02]"
                   }`}
                 >
-                  <p className={`text-sm font-semibold ${textPrimary}`}>
-                    AI зөвлөмж
+                  <p className={`text-sm font-bold flex items-center gap-2 ${textPrimary}`}>
+
+                    Эхлэх зөвлөмж
                   </p>
-                  <p
-                    className={`mt-2 text-sm leading-6 ${isLightMode ? "text-[#526b82]" : "text-white/70"}`}
-                  >
-                    “Хариултаа эхлээд нөхцөл, дараа нь хийсэн ажил, эцэст нь үр
-                    дүн гэсэн дарааллаар хэлбэл илүү итгэлтэй сонсогдоно.”
+                  <p className={`mt-1.5 text-xs leading-5 ${isLightMode ? "text-[#526b82]" : "text-white/60"}`}>
+                    Үр дүнтэй бэлтгэл хийхийн тулд CV-дээ хамгийн сүүлд хийсэн бодит төслүүд болон гол ур чадваруудаа тодорхой бичсэн байх хэрэгтэй шүү.
                   </p>
-                  <div
-                    className={`mt-4 h-2 overflow-hidden rounded-full ${isLightMode ? "bg-[#dbeafe]" : "bg-white/10"}`}
-                  >
-                    <div className="h-full w-[78%] rounded-full bg-[#0ea5e9] progress-glow" />
-                  </div>
                 </div>
               </div>
             </div>

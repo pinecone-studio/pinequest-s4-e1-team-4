@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { BenefitsSection } from "./components/BenefitsSection";
+
 import { Footer } from "./components/Footer";
 import { HeroSection } from "./components/HeroSection";
 import { LandingStyles } from "./components/LandingStyles";
@@ -52,7 +52,7 @@ export default function InterviewAiLandingPage() {
         isLightMode={isLightMode}
         onToggleTheme={() => setIsLightMode((current) => !current)}
       />
-      <BenefitsSection isLightMode={isLightMode} />
+
       <ToolsSection isLightMode={isLightMode} />
       <Footer isLightMode={isLightMode} />
       <LandingStyles />
