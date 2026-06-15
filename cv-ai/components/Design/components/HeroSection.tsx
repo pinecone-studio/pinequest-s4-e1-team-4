@@ -1,7 +1,6 @@
 import {
   ArrowRight,
   BadgeCheck,
-  BrainCircuit,
   MessageSquareText,
   Moon,
   Sparkles,
@@ -52,18 +51,10 @@ export function HeroSection({
 
       <nav className="relative mx-auto flex max-w-7xl animate-[slideDown_0.75s_ease-out_both] items-center justify-between px-5 py-5 sm:px-8">
         <a href="#home" className="flex items-center gap-3">
-          <span
-            className={`grid h-11 w-11 place-items-center rounded-xl border text-[#38bdf8] transition duration-300 hover:rotate-3 hover:scale-105 ${
-              isLightMode
-                ? "border-[#bae6fd] bg-white shadow-[0_14px_34px_rgba(14,165,233,0.18)] hover:shadow-[0_18px_44px_rgba(14,165,233,0.25)]"
-                : "border-[#38bdf8]/35 bg-[#07111f] shadow-[0_0_30px_rgba(56,189,248,0.25)] hover:shadow-[0_0_40px_rgba(56,189,248,0.4)]"
-            }`}
-          >
-            <BrainCircuit className="h-6 w-6" aria-hidden="true" />
-          </span>
+      
           <span>
             <span className={`block text-base font-bold ${textPrimary}`}>
-              Interview AI
+              ЯрилцлагаAI
             </span>
             <span className={`block text-xs font-medium ${textMuted}`}>
               CV ба ярилцлагын туслах
@@ -77,9 +68,6 @@ export function HeroSection({
           </a>
           <a className="transition hover:text-[#38bdf8]" href="#tools">
             Хэрэгслүүд
-          </a>
-          <a className="transition hover:text-[#38bdf8]" href="#footer">
-            Холбоо
           </a>
         </div>
 
@@ -104,11 +92,8 @@ export function HeroSection({
             href="#tools"
             className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#0ea5e9] px-5 text-sm font-semibold text-white shadow-[0_14px_35px_rgba(14,165,233,0.28)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#0284c7]"
           >
-            Эхлэх
-            <ArrowRight
-              className="h-4 w-4 transition duration-300 group-hover:translate-x-1"
-              aria-hidden="true"
-            />
+            Нэвтрэх
+
           </a>
         </div>
       </nav>
@@ -141,12 +126,11 @@ export function HeroSection({
           }}
         >
           <div className={`hero-kicker mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold shadow-sm backdrop-blur ${chipClass}`}>
-            <Sparkles className="h-4 w-4 text-[#0284c7]" aria-hidden="true" />
             Ажилд ороход туслах ухаалаг хөтөч
           </div>
 
           <p className={`hero-copy mt-5 max-w-2xl text-lg leading-8 ${textMuted}`}>
-            Interview AI нь таны resume-г ойлгомжтой болгож, ажилд орох
+            ЯрилцлагаAI нь таны resume-г ойлгомжтой болгож, ажилд орох
             ярилцлагын асуултаар дасгал хийлгэнэ. Хаанаас эхлэхээ мэдэхгүй
             байсан ч дараагийн алхам бүрийг монголоор тодорхой харуулна.
           </p>
@@ -218,10 +202,7 @@ export function HeroSection({
                       Junior Frontend Developer
                     </h3>
                   </div>
-                  <BadgeCheck
-                    className="h-8 w-8 text-[#0284c7]"
-                    aria-hidden="true"
-                  />
+                  
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2">

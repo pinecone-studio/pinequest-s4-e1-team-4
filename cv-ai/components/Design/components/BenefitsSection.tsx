@@ -84,18 +84,7 @@ export function BenefitsSection({ isLightMode }: BenefitsSectionProps) {
                 <span className="text-sm font-bold  text-[#38bdf8]">
                   0{index + 1}
                 </span>
-                <div
-                  className={`grid h-12 w-12 shrink-0 place-items-center rounded-2xl border  ${
-                    isLightMode
-                      ? "border-[#bae6fd] bg-white text-[#0284c7]"
-                      : "border-[#25527f] bg-[#081525] text-[#7dd3fc]"
-                  }`}
-                >
-                  <benefit.icon
-                    className=" h-6 w-6  "
-                    aria-hidden="true"
-                  />
-                </div>
+
               </div>
               <h3
                 className={`text-xl font-semibold leading-8 ${
