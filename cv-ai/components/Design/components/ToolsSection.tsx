@@ -2,12 +2,14 @@ import { CheckCircle2, FileText, MessageSquareText } from "lucide-react";
 import Link from "next/link";
 
 import { interviewSteps, resumeSteps } from "../data";
+import { useClerk } from "@clerk/nextjs";
 
 type ToolsSectionProps = {
   isLightMode: boolean;
 };
 
 export function ToolsSection({ isLightMode }: ToolsSectionProps) {
+  const { redirectToSignUp } = useClerk();
   return (
     <section
       id="tools"
@@ -31,13 +33,21 @@ export function ToolsSection({ isLightMode }: ToolsSectionProps) {
               isLightMode ? "text-[#526b82]" : "text-[#9db7d3]"
             }`}
           >
-            Хоёр үндсэн хэсэгтэй тул хүн бүр юунаас эхлэхээ шууд ойлгоно:
-            эхлээд CV-гээ цэгцэл, дараа нь ярилцлагаа давт.
+            Хоёр үндсэн хэсэгтэй тул хүн бүр юунаас эхлэхээ шууд ойлгоно: эхлээд
+            CV-гээ цэгцэл, дараа нь ярилцлагаа давт.
           </p>
         </div>
 
         <div className="grid gap-5 lg:grid-cols-2">
-          <Link
+          <button
+            onClick={() => redirectToSignUp({ redirectUrl: "/sign-up" })}
+            className={`tool-card scroll-fade-left surface-hover rounded-2xl border p-6 shadow-sm hover:border-[#38bdf8]/70 hover:shadow-[0_22px_55px_rgba(14,165,233,0.16)] ${
+              isLightMode
+                ? "border-[#dbeafe] bg-white"
+                : "border-[#1f4f7a] bg-[#0b1728]"
+            }`}
+          >
+            {/* <Link
             href="/cv"
             aria-label="Resume хэсэг рүү очих"
             className={`tool-card scroll-fade-left surface-hover rounded-2xl border p-6 shadow-sm hover:border-[#38bdf8]/70 hover:shadow-[0_22px_55px_rgba(14,165,233,0.16)] ${
@@ -45,7 +55,7 @@ export function ToolsSection({ isLightMode }: ToolsSectionProps) {
                 ? "border-[#dbeafe] bg-white"
                 : "border-[#1f4f7a] bg-[#0b1728]"
             }`}
-          >
+          > */}
             <div className="mb-8 flex items-start justify-between gap-4">
               <div>
                 <h3
@@ -66,7 +76,9 @@ export function ToolsSection({ isLightMode }: ToolsSectionProps) {
                 <FileText className="h-6 w-6" aria-hidden="true" />
               </span>
             </div>
-            <p className={`leading-7 ${isLightMode ? "text-[#526b82]" : "text-[#9db7d3]"}`}>
+            <p
+              className={`leading-7 ${isLightMode ? "text-[#526b82]" : "text-[#9db7d3]"}`}
+            >
               Resume хэсэг таны мэдээллийг эмхэлж, ажил олгогчид хурдан
               ойлгогдох хэлбэрт оруулна.
             </p>
@@ -81,13 +93,18 @@ export function ToolsSection({ isLightMode }: ToolsSectionProps) {
                     className="mt-0.5 h-5 w-5 shrink-0 text-[#0284c7]"
                     aria-hidden="true"
                   />
-                  <span className={isLightMode ? "text-[#24384a]" : "text-[#dcecff]"}>
+                  <span
+                    className={
+                      isLightMode ? "text-[#24384a]" : "text-[#dcecff]"
+                    }
+                  >
                     {step}
                   </span>
                 </li>
               ))}
             </ul>
-          </Link>
+          </button>
+          {/* </Link> */}
 
           <article
             className={`tool-card scroll-fade-right surface-hover rounded-2xl border p-6 shadow-sm hover:border-[#60a5fa] ${
@@ -104,7 +121,9 @@ export function ToolsSection({ isLightMode }: ToolsSectionProps) {
                 <MessageSquareText className="h-6 w-6" aria-hidden="true" />
               </span>
             </div>
-            <p className={`leading-7 ${isLightMode ? "text-[#526b82]" : "text-white/70"}`}>
+            <p
+              className={`leading-7 ${isLightMode ? "text-[#526b82]" : "text-white/70"}`}
+            >
               Interview хэсэг таныг бодит ярилцлагад бэлтгэж, хариултаа илүү
               тод, итгэлтэй хэлэхэд тусална.
             </p>
@@ -119,7 +138,9 @@ export function ToolsSection({ isLightMode }: ToolsSectionProps) {
                     className="mt-0.5 h-5 w-5 shrink-0 text-[#0284c7]"
                     aria-hidden="true"
                   />
-                  <span className={isLightMode ? "text-[#24384a]" : "text-white/90"}>
+                  <span
+                    className={isLightMode ? "text-[#24384a]" : "text-white/90"}
+                  >
                     {step}
                   </span>
                 </li>
