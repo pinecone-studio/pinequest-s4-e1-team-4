@@ -22,9 +22,11 @@ export function TopActions({
   return (
     <section className="space-y-3 animate-in fade-in-50 duration-300">
       <div className="grid grid-cols-2 gap-2">
-        <label className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-zinc-300 px-3 py-2.5 text-xs font-medium transition-all hover:border-black hover:bg-slate-50 active:scale-95 dark:border-[#25527f] dark:text-[#dcecff] dark:hover:border-[#38bdf8] dark:hover:bg-[#0b1e33] sm:text-sm">
+        <label className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-zinc-300 px-3 py-2.5 text-xs font-medium transition-all active:scale-95 dark:border-[#25527f] dark:text-[#dcecff]  sm:text-sm text-white bg-[#0ea5e9] hover:bg-[#0284c7]">
           <Upload className="h-4 w-4 flex-shrink-0" />
-          <span className="truncate">{uploading ? "Reading..." : "Upload"}</span>
+          <span className="truncate">
+            {uploading ? "Reading..." : "Upload"}
+          </span>
           <input
             className="sr-only"
             type="file"
@@ -36,7 +38,7 @@ export function TopActions({
           />
         </label>
         <button
-          className="flex items-center justify-center gap-2 rounded-md bg-black px-3 py-2.5 text-xs font-semibold text-white transition-all hover:bg-zinc-800 active:scale-95 disabled:opacity-50 dark:bg-[#0ea5e9] dark:hover:bg-[#0284c7] sm:text-sm"
+          className="flex items-center justify-center gap-2 rounded-md bg-[#0ea5e9] px-3 py-2.5 text-xs font-semibold text-white transition-all hover:bg-[#0284c7] active:scale-95 disabled:opacity-50 dark:bg-[#0ea5e9] dark:hover:bg-[#0284c7] sm:text-sm"
           disabled={busy}
           onClick={onAnalyze}
           type="button"
@@ -54,8 +56,8 @@ export function TopActions({
             onClick={() => onField("template", template.id)}
             className={`flex items-center justify-center gap-1 rounded-md border px-2 py-2 text-xs transition-all active:scale-95 ${
               cv.template === template.id
-                ? "border-black bg-black text-white shadow-md dark:border-[#38bdf8] dark:bg-[#0ea5e9]"
-                : "border-zinc-300 hover:border-black hover:bg-slate-50 dark:border-[#25527f] dark:text-[#dcecff] dark:hover:border-[#38bdf8] dark:hover:bg-[#0b1e33]"
+                ? " bg-[#0ea5e9] text-white shadow-md dark:border-[#38bdf8] dark:bg-[#0ea5e9]"
+                : "border-zinc-300 hover:border-[#0ea5e9] hover:bg-slate-50 dark:border-[#25527f] dark:text-[#dcecff] dark:hover:border-[#38bdf8] dark:hover:bg-[#0b1e33]"
             }`}
             type="button"
           >
