@@ -2,14 +2,26 @@ import { CheckCircle2, FileText, MessageSquareText } from "lucide-react";
 import Link from "next/link";
 
 import { interviewSteps, resumeSteps } from "../data";
-import { useClerk } from "@clerk/nextjs";
+import { useClerk, useAuth } from "@clerk/nextjs";
+
+import { useRouter } from "next/navigation";
 
 type ToolsSectionProps = {
   isLightMode: boolean;
 };
 
 export function ToolsSection({ isLightMode }: ToolsSectionProps) {
-  const { redirectToSignUp } = useClerk();
+  const { isSignedIn } = useAuth();
+  const { redirectToSignIn } = useClerk();
+  const router = useRouter();
+
+  function handleNav(path: "/cv" | "/interview") {
+    if (isSignedIn) {
+      router.push(path);
+    } else {
+      redirectToSignIn({ redirectUrl: path });
+    }
+  }
   return (
     <section
       id="tools"
@@ -40,7 +52,7 @@ export function ToolsSection({ isLightMode }: ToolsSectionProps) {
 
         <div className="grid gap-5 lg:grid-cols-2">
           <button
-            onClick={() => redirectToSignUp({ redirectUrl: "/sign-up" })}
+            onClick={() => handleNav("/cv")}
             className={`tool-card scroll-fade-left surface-hover rounded-2xl border p-6 shadow-sm hover:border-[#38bdf8]/70 hover:shadow-[0_22px_55px_rgba(14,165,233,0.16)] ${
               isLightMode
                 ? "border-[#dbeafe] bg-white"
@@ -113,39 +125,43 @@ export function ToolsSection({ isLightMode }: ToolsSectionProps) {
                 : "border-[#2563eb]/50 bg-[#020617] text-white hover:shadow-[0_22px_55px_rgba(37,99,235,0.22)]"
             }`}
           >
-            <div className="mb-8 flex items-start justify-between gap-4">
-              <div>
-                <h3 className="text-3xl font-semibold">Interview хэсэг</h3>
+            <button onClick={() => handleNav("/interview")}>
+              <div className="mb-8 flex items-start justify-between gap-4">
+                <div>
+                  <h3 className="text-3xl font-semibold">Interview хэсэг</h3>
+                </div>
+                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-[#0ea5e9] text-white">
+                  <MessageSquareText className="h-6 w-6" aria-hidden="true" />
+                </span>
               </div>
-              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-[#0ea5e9] text-white">
-                <MessageSquareText className="h-6 w-6" aria-hidden="true" />
-              </span>
-            </div>
-            <p
-              className={`leading-7 ${isLightMode ? "text-[#526b82]" : "text-white/70"}`}
-            >
-              Interview хэсэг таныг бодит ярилцлагад бэлтгэж, хариултаа илүү
-              тод, итгэлтэй хэлэхэд тусална.
-            </p>
-            <ul className="mt-7 space-y-4">
-              {interviewSteps.map((step, index) => (
-                <li
-                  key={step}
-                  className="checklist-item flex gap-3"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <CheckCircle2
-                    className="mt-0.5 h-5 w-5 shrink-0 text-[#0284c7]"
-                    aria-hidden="true"
-                  />
-                  <span
-                    className={isLightMode ? "text-[#24384a]" : "text-white/90"}
+              <p
+                className={`leading-7 ${isLightMode ? "text-[#526b82]" : "text-white/70"}`}
+              >
+                Interview хэсэг таныг бодит ярилцлагад бэлтгэж, хариултаа илүү
+                тод, итгэлтэй хэлэхэд тусална.
+              </p>
+              <ul className="mt-7 space-y-4">
+                {interviewSteps.map((step, index) => (
+                  <li
+                    key={step}
+                    className="checklist-item flex gap-3"
+                    style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    {step}
-                  </span>
-                </li>
-              ))}
-            </ul>
+                    <CheckCircle2
+                      className="mt-0.5 h-5 w-5 shrink-0 text-[#0284c7]"
+                      aria-hidden="true"
+                    />
+                    <span
+                      className={
+                        isLightMode ? "text-[#24384a]" : "text-white/90"
+                      }
+                    >
+                      {step}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </button>
           </article>
         </div>
       </div>

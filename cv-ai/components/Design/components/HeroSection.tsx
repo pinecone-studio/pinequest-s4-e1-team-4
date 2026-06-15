@@ -22,7 +22,7 @@ export function HeroSection({
   isLightMode,
   onToggleTheme,
 }: HeroSectionProps) {
-  const { redirectToSignUp } = useClerk();
+  const { redirectToSignIn } = useClerk();
 
   const textPrimary = isLightMode ? "text-[#08111f]" : "text-white";
   const textMuted = isLightMode ? "text-[#526b82]" : "text-[#9db7d3]";
@@ -55,7 +55,6 @@ export function HeroSection({
 
       <nav className="relative mx-auto flex max-w-7xl animate-[slideDown_0.75s_ease-out_both] items-center justify-between px-5 py-5 sm:px-8">
         <a href="#home" className="flex items-center gap-3">
-      
           <span>
             <span className={`block text-base font-bold ${textPrimary}`}>
               ЯрилцлагаAI
@@ -94,14 +93,12 @@ export function HeroSection({
               <Sun className="h-5 w-5" aria-hidden="true" />
             )}
           </button>
-          <a
-            href="#tools"
+          <button
+            onClick={() => redirectToSignIn({ redirectUrl: "/" })}
             className="group inline-flex h-11 items-center gap-2 rounded-full bg-[#0ea5e9] px-5 text-sm font-semibold text-white shadow-[0_14px_35px_rgba(14,165,233,0.28)] transition duration-300 hover:-translate-y-0.5 hover:bg-[#0284c7]"
           >
             Нэвтрэх
-
-          </a>
-       =
+          </button>
         </div>
       </nav>
 
@@ -220,7 +217,6 @@ export function HeroSection({
                       Junior Frontend Developer
                     </h3>
                   </div>
-                  
                 </div>
 
                 <div className="grid gap-3 sm:grid-cols-2">
