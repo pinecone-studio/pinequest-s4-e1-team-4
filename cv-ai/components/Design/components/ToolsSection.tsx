@@ -26,14 +26,7 @@ export function ToolsSection({ isLightMode }: ToolsSectionProps) {
               Resume болон interview бэлтгэлээ нэг дор.
             </h2>
           </div>
-          <p
-            className={`max-w-md leading-7 ${
-              isLightMode ? "text-[#526b82]" : "text-[#9db7d3]"
-            }`}
-          >
-            Хоёр үндсэн хэсэгтэй тул хүн бүр юунаас эхлэхээ шууд ойлгоно:
-            эхлээд CV-гээ цэгцэл, дараа нь ярилцлагаа давт.
-          </p>
+         
         </div>
 
         <div className="grid gap-5 lg:grid-cols-2">
