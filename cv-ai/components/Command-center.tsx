@@ -4,12 +4,19 @@ import React, { useState, useEffect, useRef } from "react";
 import { Conversation, Message } from "./Conversation";
 import { CommandInput } from "./Command-input";
 import { Globe } from "lucide-react";
+import type { CvData } from "@/lib/cv/types";
 
 interface CommandCenterProps {
   onExtract?: (data: any) => void;
+  onCvUpdate?: (data: any) => void;
+  resumeData?: CvData;
 }
 
-export function CommandCenter({ onExtract }: CommandCenterProps) {
+export function CommandCenter({
+  onExtract,
+  onCvUpdate,
+  resumeData,
+}: CommandCenterProps) {
   const [language, setLanguage] = useState<"mn" | "en">("mn");
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -64,7 +71,7 @@ export function CommandCenter({ onExtract }: CommandCenterProps) {
     setMessages((prev) => [...prev, message]);
 
   return (
-    <section className="flex h-screen w-full flex-col border-b border-border lg:w-1/2 lg:border-b-0 lg:border-r bg-background">
+    <section className="flex h-full min-h-[520px] w-full flex-col bg-background">
       <header className="flex items-center justify-between px-8 py-5 border-b border-border/40">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-foreground">
@@ -108,6 +115,8 @@ export function CommandCenter({ onExtract }: CommandCenterProps) {
         setIsQueryLoading={setIsLoading}
         messages={messages}
         onExtract={onExtract}
+        onCvUpdate={onCvUpdate}
+        resumeData={resumeData}
         language={language}
       />
     </section>

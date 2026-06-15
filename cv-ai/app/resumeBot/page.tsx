@@ -1,7 +1,21 @@
-import React from "react";
+"use client";
 
-const ResumeBot = () => {
-  return <div className="w-[50%] h-[50%] ">page</div>;
+import { CommandCenter } from "@/components/Command-center";
+import type { CvData } from "@/lib/cv/types";
+
+type ResumeBotProps = {
+  resumeData?: CvData;
+  onCvUpdate?: (data: any) => void;
+};
+
+const ResumeBot = ({ resumeData, onCvUpdate }: ResumeBotProps) => {
+  return (
+    <CommandCenter
+      resumeData={resumeData}
+      onCvUpdate={onCvUpdate}
+      onExtract={onCvUpdate}
+    />
+  );
 };
 
 export default ResumeBot;
