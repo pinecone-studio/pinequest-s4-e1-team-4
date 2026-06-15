@@ -1,5 +1,5 @@
-import type { AiResult, CvData } from "./types";
-import { TOP_COMPANIES, analyzeCompanyFit } from "./companies";
+import type { AiResult, CvData, EducationItem, ExperienceItem } from "./types";
+import { analyzeCompanyFit } from "./companies";
 
 const KNOWN_SKILLS = [
   "React",
@@ -94,18 +94,110 @@ function roleKeywords(role: string) {
   );
 }
 
+function filled(value: string) {
+  return Boolean(value.trim());
+}
+
+function completion(values: string[]) {
+  if (values.length === 0) return 0;
+  return values.filter(filled).length / values.length;
+}
+
+function summaryCompletion(summary: string) {
+  return filled(summary) ? 1 : 0;
+}
+
+function skillsCompletion(skills: string[]) {
+  return skills.length > 0 ? 1 : 0;
+}
+
+function experienceCompletion(items: ExperienceItem[], legacyExperience: string) {
+  const visibleItems = items.length ? items : [];
+  if (visibleItems.length === 0) return filled(legacyExperience) ? 1 : 0;
+
+  const itemScores = visibleItems.map((item) =>
+    completion([
+      item.jobTitle,
+      item.companyName,
+      item.address,
+      item.startDate,
+      item.endDate,
+      item.functionsAchievements,
+    ]),
+  );
+
+  return itemScores.reduce((sum, score) => sum + score, 0) / itemScores.length;
+}
+
+function educationCompletion(items: EducationItem[], legacyEducation: string) {
+  const visibleItems = items.length ? items : [];
+  if (visibleItems.length === 0) return filled(legacyEducation) ? 1 : 0;
+
+  const itemScores = visibleItems.map((item) =>
+    completion([
+      item.level,
+      item.schoolName,
+      item.address,
+      item.startDate,
+      item.endDate,
+    ]),
+  );
+
+  return itemScores.reduce((sum, score) => sum + score, 0) / itemScores.length;
+}
+
+function atsScore(cv: CvData, skills: string[]) {
+  const profileScore =
+    completion([
+      cv.name,
+      cv.title,
+      cv.targetRole,
+      cv.email,
+      cv.phone,
+      cv.location,
+      cv.link,
+    ]) * 39;
+
+  const score =
+    profileScore +
+    summaryCompletion(cv.summary) * 14 +
+    skillsCompletion(skills) * 14 +
+    experienceCompletion(cv.experiences, cv.experience) * 18 +
+    educationCompletion(cv.educations, cv.education) * 15;
+
+  return Math.max(0, Math.min(100, Math.round(score)));
+}
+
 export function buildAiResult(cv: CvData, cvText = ""): AiResult {
   const skills = splitItems(cv.skills);
   const text = `${cv.summary} ${cv.experience} ${cv.projects} ${cvText}`;
   const hasMetric = /\b\d+%|\b\d+x|\b\d+\+|\b\d{2,}\b/.test(text);
+  const hasExperience =
+    filled(cv.experience) ||
+    cv.experiences.some((item) =>
+      [
+        item.jobTitle,
+        item.companyName,
+        item.address,
+        item.startDate,
+        item.endDate,
+        item.functionsAchievements,
+      ].some(filled),
+    );
+  const hasEducation =
+    filled(cv.education) ||
+    cv.educations.some((item) =>
+      [item.level, item.schoolName, item.address, item.startDate, item.endDate].some(filled),
+    );
   
   const advice = [
     !cv.summary && "Summary хэсэгт 2-3 өгүүлбэрээр гол үнэ цэнээ бич.",
     !hasMetric && "Ажлын үр дүнгээ тоо, хувь, хугацаа эсвэл хэмжүүртэй болго.",
     skills.length < 5 &&
       "Target role-д таарах 6-10 ур чадварыг түлхүүр үгээр нэм.",
-    !cv.experience &&
+    !hasExperience &&
       "Сүүлийн ажлын туршлагаа role, company, impact хэлбэрээр оруул.",
+    !hasEducation && "Боловсролын мэдээллээ түвшин, сургууль, хугацаатай нь бөглө.",
     !cv.email && "Recruiter шууд холбогдох имэйл заавал харагдах ёстой.",
   ].filter(Boolean) as string[];
 
@@ -113,16 +205,7 @@ export function buildAiResult(cv: CvData, cvText = ""): AiResult {
     ...new Set([...roleKeywords(cv.targetRole), ...skills]),
   ].slice(0, 8);
 
-  const score = Math.min(
-    98,
-    38 +
-      Number(Boolean(cv.name)) * 8 +
-      Number(Boolean(cv.email)) * 8 +
-      Number(Boolean(cv.summary)) * 12 +
-      Number(Boolean(cv.experience)) * 14 +
-      Math.min(skills.length * 3, 15) +
-      Number(hasMetric) * 10,
-  );
+  const score = atsScore(cv, skills);
 
   const role = cv.targetRole || cv.title || "сонгосон ажлын байр";
   const improvedSummary =

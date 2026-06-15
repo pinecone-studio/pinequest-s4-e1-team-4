@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { splitItems } from "@/lib/cv/local-ai";
 import { EducationTimeline } from "./EducationTimeline";
 import { ExperienceTimeline } from "./ExperienceTimeline";
+import { UserRound } from "lucide-react";
 
 function SidebarSection({
   title,
@@ -67,17 +68,32 @@ export function TimelineTemplate({ cv }: { cv: CvData }) {
 
       <main className="px-6 py-10">
         <header className="mb-6 border-b border-stone-200 pb-5">
-          <h1 className="break-words text-2xl font-bold text-stone-800">
-            {cv.name || "Таны нэр"}
-          </h1>
-          <p className="mt-1 text-[13px] font-bold text-stone-700">
-            {cv.title || cv.targetRole}
-          </p>
-          {cv.summary && (
-            <p className="mt-2 text-[12px] leading-5 text-stone-600">
-              {cv.summary}
-            </p>
-          )}
+          <div className="flex items-start justify-between gap-6">
+            <div className="min-w-0 flex-1">
+              <h1 className="break-words text-2xl font-bold text-stone-800">
+                {cv.name || "Таны нэр"}
+              </h1>
+              <p className="mt-1 text-[13px] font-bold text-stone-700">
+                {cv.title || cv.targetRole}
+              </p>
+              {cv.summary && (
+                <p className="mt-2 text-[12px] leading-5 text-stone-600">
+                  {cv.summary}
+                </p>
+              )}
+            </div>
+            <div className="grid h-[86px] w-[70px] shrink-0 place-items-center overflow-hidden bg-stone-100 text-stone-400 ring-1 ring-stone-200">
+              {cv.photo ? (
+                <img
+                  alt={cv.name ? `${cv.name} profile` : "Profile"}
+                  className="h-full w-full object-cover object-center"
+                  src={cv.photo}
+                />
+              ) : (
+                <UserRound className="h-9 w-9" strokeWidth={1.4} />
+              )}
+            </div>
+          </div>
         </header>
 
         <div className="space-y-6">

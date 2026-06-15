@@ -2,6 +2,7 @@ import type { CvData } from "@/lib/cv/types";
 import { splitItems } from "@/lib/cv/local-ai";
 import { EducationTimeline } from "./EducationTimeline";
 import { ExperienceTimeline } from "./ExperienceTimeline";
+import { UserRound } from "lucide-react";
 
 const sectionTitle =
   "text-[10px] font-black uppercase tracking-[0.22em] text-sky-700";
@@ -38,16 +39,29 @@ export function ExecutiveTemplate({ cv }: { cv: CvData }) {
     <article className="print-area mx-auto min-h-[920px] w-full max-w-[760px] overflow-hidden bg-white shadow-lg ring-1 ring-sky-100">
       <header className="relative bg-slate-950 px-10 py-9 text-white">
         <div className="absolute inset-y-0 right-0 w-48 bg-[linear-gradient(135deg,rgba(14,165,233,0.5),transparent_65%)]" />
-        <div className="relative">
-          <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-sky-300">
-            Executive Profile
-          </p>
-          <h1 className="max-w-xl break-words text-4xl font-black leading-tight tracking-normal">
-            {cv.name || "Your Name"}
-          </h1>
-          <p className="mt-3 text-base font-semibold text-sky-200">
-            {cv.title || cv.targetRole}
-          </p>
+        <div className="relative flex items-start justify-between gap-8">
+          <div className="min-w-0 flex-1">
+            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.28em] text-sky-300">
+              Executive Profile
+            </p>
+            <h1 className="max-w-xl break-words text-4xl font-black leading-tight tracking-normal">
+              {cv.name || "Your Name"}
+            </h1>
+            <p className="mt-3 text-base font-semibold text-sky-200">
+              {cv.title || cv.targetRole}
+            </p>
+          </div>
+          <div className="grid h-28 w-24 shrink-0 place-items-center overflow-hidden rounded-md border border-sky-300/40 bg-slate-800 text-sky-200 shadow-xl">
+            {cv.photo ? (
+              <img
+                alt={cv.name ? `${cv.name} profile` : "Profile"}
+                className="h-full w-full object-cover object-center"
+                src={cv.photo}
+              />
+            ) : (
+              <UserRound className="h-11 w-11" strokeWidth={1.4} />
+            )}
+          </div>
         </div>
       </header>
 
